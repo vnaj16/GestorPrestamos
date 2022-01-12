@@ -1,0 +1,9 @@
+2022-01-12 15:02:37.471 -05:00 [INF] Enter to Index Page
+2022-01-12 15:02:50.135 -05:00 [INF] Enter to Index Page
+2022-01-12 15:02:51.632 -05:00 [WRN] Enter to Privacy Page
+2022-01-12 15:06:01.080 -05:00 [INF] Enter to Index Page
+2022-01-12 15:06:17.642 -05:00 [INF] Enter to Index Page
+2022-01-12 15:20:57.289 -05:00 [INF] Enter to Index Page
+2022-01-12 15:20:57.385 -05:00 [INF] Result from Service 146
+2022-01-12 15:21:08.304 -05:00 [INF] Enter to Index Page
+2022-01-12 15:21:08.570 -05:00 [INF] Result from Service 146
