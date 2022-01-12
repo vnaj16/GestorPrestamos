@@ -1,4 +1,5 @@
 using GestorPrestamos.Extensions;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,5 +27,11 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("logs/myapp.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 app.Run();
