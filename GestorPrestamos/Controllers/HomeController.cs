@@ -1,4 +1,5 @@
-﻿using GestorPrestamos.Models;
+﻿using GestorPrestamos.Data.Interfaces;
+using GestorPrestamos.Models;
 using GestorPrestamos.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -10,11 +11,13 @@ namespace GestorPrestamos.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IMyService myService;
+        private readonly IPrestamoRepository prestamoRepository;
 
-        public HomeController(ILogger<HomeController> logger, IMyService myService)
+        public HomeController(ILogger<HomeController> logger, IMyService myService, IPrestamoRepository prestamoRepository)
         {
             _logger = logger;
             this.myService = myService;
+            this.prestamoRepository = prestamoRepository;
         }
 
         public IActionResult Index()
@@ -26,8 +29,19 @@ namespace GestorPrestamos.Controllers
 
         public IActionResult Privacy()
         {
-            Log.Warning("Enter to Privacy Page");
-            return View();
+            //Log.Warning("Enter to Privacy Page");
+            var x = prestamoRepository.GetAll();
+            return Json(x);
+        }
+
+        public IActionResult GetById(string id)
+        {
+            return Json(prestamoRepository.GetById(id));
+        }
+
+        public IActionResult GetByIdWithDeudorIncluded(string id)
+        {
+            return Json(prestamoRepository.GetByIdWithDeudorEntityIncluded(id));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

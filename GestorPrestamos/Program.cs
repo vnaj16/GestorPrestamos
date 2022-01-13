@@ -1,3 +1,4 @@
+using GestorPrestamos.Data.Extensions;
 using GestorPrestamos.Extensions;
 using Serilog;
 
@@ -6,6 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.RegisterMyCustomServices();
+builder.Services.ConfigureExcelRepository(
+    options =>
+    {
+        options.FilePath = @"G:\Temporales\GestorPrestamosTest.xlsx";
+});
 
 var app = builder.Build();
 

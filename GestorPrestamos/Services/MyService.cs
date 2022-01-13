@@ -5,16 +5,20 @@ namespace GestorPrestamos.Services
 {
     public class MyService : IMyService
     {
-        public readonly IRepository repository;
+        //public readonly IRepository repository;
 
-        public MyService(IRepository repository)
-        {
-            this.repository = repository;
-        }
+        //public MyService(IRepository repository)
+        //{
+        //    this.repository = repository;
+        //}
 
+        //public int GetData()
+        //{
+        //    return repository.GetData();
+        //}
         public int GetData()
         {
-            return repository.GetData();
+            return 146;
         }
     }
 }

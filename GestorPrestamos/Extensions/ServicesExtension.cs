@@ -10,7 +10,7 @@ namespace GestorPrestamos.Extensions
         public static void RegisterMyCustomServices(this IServiceCollection services)
         {
             services.AddScoped<IMyService, MyService>();
-            services.AddScoped<IRepository, ExcelRepository>();
+            services.AddScoped<IPrestamoRepository, PrestamoExcelRepository>();
         }
     }
 }

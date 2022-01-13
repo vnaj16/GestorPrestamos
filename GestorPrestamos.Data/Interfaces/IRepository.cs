@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace GestorPrestamos.Data.Interfaces
 {
-    public interface IRepository
+    public interface IRepository<T, I>
     {
-        public int GetData();
+        public List<T> GetAll();
+        public T GetById(I id);
+        public T Add(T newEntity);
+        public T Update(T updatedEntity);
+        public bool Delete(I id);
     }
 }
