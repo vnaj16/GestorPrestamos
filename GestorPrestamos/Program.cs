@@ -9,8 +9,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.RegisterMyCustomServices();
 builder.Services.ConfigureExcelRepository(
     options =>
-    {
-        options.FilePath = @"G:\Temporales\GestorPrestamosTest.xlsx";
+    {//TODO: Ponerlo en AppSettings, Crear un modelo y bindearlo
+        //options.FilePath = @"G:\Temporales\GestorPrestamosTest.xlsx";
+        options.FilePath = @"C:\Users\arthu\OneDrive\GestorPrestamosTest.xlsx";
 });
 
 var app = builder.Build();

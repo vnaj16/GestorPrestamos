@@ -1,4 +1,5 @@
-﻿using GestorPrestamos.Data.Interfaces;
+﻿using GestorPrestamos.Data.Entities;
+using GestorPrestamos.Data.Interfaces;
 using GestorPrestamos.Models;
 using GestorPrestamos.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,18 @@ namespace GestorPrestamos.Controllers
         public IActionResult GetByIdWithDeudorIncluded(string id)
         {
             return Json(prestamoRepository.GetByIdWithDeudorEntityIncluded(id));
+        }
+
+        [HttpPost]
+        public IActionResult AddPrestamo([FromBody]Prestamo entity)
+        {
+            return Json(prestamoRepository.Add(entity));
+        }
+
+        [HttpPut]
+        public IActionResult UpdatePrestamo([FromBody] Prestamo entity)
+        {
+            return Json(prestamoRepository.Update(entity));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
