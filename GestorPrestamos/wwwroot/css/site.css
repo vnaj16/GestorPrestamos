@@ -1,18 +1,78 @@
+/*//////////VARIABLES SECTION////////*/
+:root {
+    --main-bg-color: #212427;
+    --main-color: #0A81AB; /*For Label Text, Border Input, For Main or Selected Button*/
+    --main-text-color: white;
+    /*For Footer Bar: C8C6C6*/
+    /*For Second Button: 334756*/
+}
+/*//////////END VARIABLES SECTION////////*/
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
 }
+
+span {
+    color: var(--main-color);
+}
+
+hr {
+    width: 50%;
+    height: 2.5px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: var(--main-color);
+}
+
+.horizontal-hr {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 2px;
+    height: 256px;
+    background-color: var(--main-color);
+}
+
+p {
+    color: var(--main-color);
+}
+
+input, label {
+    display: block;
+}
+
+ul {
+    justify-content: center;
+    display: flex;
+}
+
+/*More for Input: https://www.w3schools.com/css/tryit.asp?filename=trycss_forms*/
+.custom-input {
+    border-color: var(--main-color);
+    border-style: solid;
+    border-width: 1px;
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+    outline:none;
+}
+.custom-input:focus {
+    border-width: 2px;
+}
+
