@@ -1,5 +1,9 @@
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using GestorPrestamos.Data.Extensions;
 using GestorPrestamos.Extensions;
+using GestorPrestamos.Models.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,11 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.RegisterMyCustomServices();
+ConfigurationManager configuration = builder.Configuration;
+builder.Services.Configure<ExcelConfiguration>(configuration.GetSection("ExcelConfiguration"));
+builder.Services.AddScoped(sp => sp.GetService<IOptionsSnapshot<ExcelConfiguration>>().Value);
+
 builder.Services.ConfigureExcelRepository(
     options =>
-    {//TODO: Ponerlo en AppSettings, Crear un modelo y bindearlo
-        //options.FilePath = @"G:\Temporales\GestorPrestamosTest.xlsx";
-        options.FilePath = @"C:\Users\arthu\OneDrive\GestorPrestamosTest.xlsx";
+    {
+        options.FilePath = configuration.GetSection("ExcelConfiguration:FilePath").Value;
 });
 
 var app = builder.Build();
