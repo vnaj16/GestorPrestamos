@@ -1,5 +1,4 @@
 ﻿using GestorPrestamos.Data.Implementations.Excel;
-using GestorPrestamos.Data.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

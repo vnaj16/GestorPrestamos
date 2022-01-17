@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
-using GestorPrestamos.Data.Entities;
-using GestorPrestamos.Data.Interfaces;
+using GestorPrestamos.Domain.Entities;
+using GestorPrestamos.Domain.Interfaces.Repository;
 using GestorPrestamos.Data.Utils;
 using SpreadsheetLight;
 using System;

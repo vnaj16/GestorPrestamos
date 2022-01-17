@@ -1,4 +1,4 @@
-﻿using GestorPrestamos.Data.Entities;
+﻿using GestorPrestamos.Domain.Entities;
 using GestorPrestamos.Data.Implementations.Excel;
 using SpreadsheetLight;
 using System;
@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GestorPrestamos.Domain.MasterData;
 
 namespace GestorPrestamos.Data.Utils
 {
-    public class DeudoresDictionary
+    public class DeudoresDictionary : IDeudoresDictionary
     {
         public Dictionary<int, Deudor> DeudoresById { get; set; }
         public Dictionary<string, Deudor> DeudoresByAlias { get; set; }

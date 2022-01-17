@@ -1,7 +1,9 @@
 ﻿using GestorPrestamos.Data.Implementations.Excel;
-using GestorPrestamos.Data.Interfaces;
-using GestorPrestamos.Services;
-using GestorPrestamos.Services.Interfaces;
+using GestorPrestamos.Data.Utils;
+using GestorPrestamos.Domain.Implementations;
+using GestorPrestamos.Domain.Interfaces;
+using GestorPrestamos.Domain.Interfaces.Repository;
+using GestorPrestamos.Domain.MasterData;
 
 namespace GestorPrestamos.Extensions
 {
@@ -9,8 +11,19 @@ namespace GestorPrestamos.Extensions
     {
         public static void RegisterMyCustomServices(this IServiceCollection services)
         {
-            services.AddScoped<IMyService, MyService>();
+            RegisterRepositories(services);
+            RegisterServices(services);
+            services.AddScoped<IDeudoresDictionary, DeudoresDictionary>();
+        }
+
+        private static void RegisterRepositories(IServiceCollection services)
+        {
             services.AddScoped<IPrestamoRepository, PrestamoExcelRepository>();
+        }
+
+        private static void RegisterServices(IServiceCollection services)
+        {
+            services.AddScoped<ILoanReceivableService, LoanReceivableService>();
         }
     }
 }

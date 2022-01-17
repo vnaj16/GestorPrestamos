@@ -10,6 +10,7 @@
     <!--<PackageReference Include="SpreadsheetLight" Version="3.5.0" />-->
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GestorPrestamos.Domain\GestorPrestamos.Domain.csproj" />
     <ProjectReference Include="..\SpreadsheetLight\SpreadsheetLight.csproj" />
   </ItemGroup>
 </Project>

@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GestorPrestamos.Data\GestorPrestamos.Data.csproj" />
+    <ProjectReference Include="..\GestorPrestamos.Domain\GestorPrestamos.Domain.csproj" />
   </ItemGroup>
 
 </Project>
