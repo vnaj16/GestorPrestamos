@@ -10,10 +10,11 @@ using GestorPrestamos.Domain.MasterData;
 
 namespace GestorPrestamos.Data.Utils
 {
+    //CREA OTRA CLASE, QUE TENGA LA PALABRA CACHEABLE
     public class DeudoresDictionary : IDeudoresDictionary
     {
-        public Dictionary<int, Deudor> DeudoresById { get; set; }
-        public Dictionary<string, Deudor> DeudoresByAlias { get; set; }
+        private Dictionary<int, Deudor> DeudoresById { get; set; }
+        private Dictionary<string, Deudor> DeudoresByAlias { get; set; }
 
         public DeudoresDictionary()
         {
@@ -70,6 +71,16 @@ namespace GestorPrestamos.Data.Utils
                 }
 
             }
+        }
+
+        public Dictionary<int, Deudor> GetDeudoresById()
+        {
+            return DeudoresById;
+        }
+
+        public Dictionary<string, Deudor> GetDeudoresByAlias()
+        {
+            return DeudoresByAlias;
         }
     }
 }

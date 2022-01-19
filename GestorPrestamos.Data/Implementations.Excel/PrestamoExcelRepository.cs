@@ -34,7 +34,7 @@ namespace GestorPrestamos.Data.Implementations.Excel
                 #region Register Data
 
                 excelFile.SetCellValue(iRowToInsert, 1, newEntity.Id);
-                excelFile.SetCellValue(iRowToInsert, 2, deudoresDictionary.DeudoresById[newEntity.IdDeudor].Alias);
+                excelFile.SetCellValue(iRowToInsert, 2, deudoresDictionary.GetDeudoresById()[newEntity.IdDeudor].Alias);
                 excelFile.SetCellValue(iRowToInsert, 3, newEntity.MontoPrestado);
                 excelFile.SetCellValue(iRowToInsert, 4, newEntity.FechaPrestamo);
                 excelFile.SetCellValue(iRowToInsert, 5, newEntity.Descripcion);
@@ -209,8 +209,8 @@ namespace GestorPrestamos.Data.Implementations.Excel
                             Estado = excelFile.GetCellValueAsString(iRow, 11),
                             Notas = excelFile.GetCellValueAsString(iRow, 12),
                             FechaPactadaDevolucion = excelFile.GetCellValueAsDateTime(iRow, 13),
-                            IdDeudor = deudoresDictionary.DeudoresByAlias[aliasDeudor].Id,
-                            Deudor = deudoresDictionary.DeudoresByAlias[aliasDeudor]
+                            IdDeudor = deudoresDictionary.GetDeudoresByAlias()[aliasDeudor].Id,
+                            Deudor = deudoresDictionary.GetDeudoresByAlias()[aliasDeudor]
                         };
                     }
 

@@ -13,7 +13,8 @@ namespace GestorPrestamos.Extensions
         {
             RegisterRepositories(services);
             RegisterServices(services);
-            services.AddScoped<IDeudoresDictionary, DeudoresDictionary>();
+            //services.AddScoped<IDeudoresDictionary, DeudoresDictionary>();
+            services.AddSingleton<IDeudoresDictionary, CacheableDeudoresDictionary>();
         }
 
         private static void RegisterRepositories(IServiceCollection services)

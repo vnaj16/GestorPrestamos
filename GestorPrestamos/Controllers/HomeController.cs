@@ -24,6 +24,7 @@ namespace GestorPrestamos.Controllers
         public IActionResult Index()
         {
             Log.Information("Enter to Index Page");
+
             //var d1 = deudoresDictionary.DeudoresById;
             //var d2 = deudoresDictionary.DeudoresByAlias;
             return View();
@@ -33,7 +34,8 @@ namespace GestorPrestamos.Controllers
         {
             //Log.Warning("Enter to Privacy Page");
             //var x = prestamoRepository.GetAll();
-            var x = _loanReceivableService.GetAllLoanReceivable();
+            //var x = _loanReceivableService.GetAllLoanReceivable();
+            var x = deudoresDictionary.GetDeudoresByAlias();
             return Json(x);
         }
 
