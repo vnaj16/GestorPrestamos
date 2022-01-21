@@ -25,6 +25,8 @@ namespace GestorPrestamos.Extensions
         private static void RegisterServices(IServiceCollection services)
         {
             services.AddScoped<ILoanReceivableService, LoanReceivableService>();
+            services.AddScoped<IMasterDataService, MasterDataService>();
+            
         }
     }
 }
