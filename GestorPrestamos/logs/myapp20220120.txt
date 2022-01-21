@@ -1,0 +1,12 @@
+2022-01-20 18:06:33.121 -05:00 [INF] Enter to Index Page
+2022-01-20 18:31:10.585 -05:00 [INF] Enter to Index Page
+2022-01-20 18:32:43.105 -05:00 [INF] Enter to Index Page
+2022-01-20 18:35:01.117 -05:00 [INF] Enter to Index Page
+2022-01-20 18:35:34.968 -05:00 [INF] Enter to Index Page
+2022-01-20 18:41:12.580 -05:00 [INF] Enter to Index Page
+2022-01-20 18:42:04.736 -05:00 [INF] Enter to Index Page
+2022-01-20 18:53:16.899 -05:00 [INF] Enter to Index Page
+2022-01-20 18:54:17.136 -05:00 [INF] Enter to Index Page
+2022-01-20 18:56:48.275 -05:00 [INF] Enter to Index Page
+2022-01-20 18:58:35.605 -05:00 [INF] Enter to Index Page
+2022-01-20 19:14:07.275 -05:00 [INF] Enter to Index Page
