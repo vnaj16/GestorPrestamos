@@ -23,6 +23,29 @@ namespace GestorPrestamos.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Info(string id="1")
+        {
+            var prestamoFromDb = _loanReceivableService.GetLoanReceivableById(id);
+            InfoPrestamoViewModel infoPrestamo = new InfoPrestamoViewModel()
+            {
+                Id = prestamoFromDb.Id,
+                AgreedRepaymentDate = prestamoFromDb.FechaPactadaDevolucion,
+                BorrowedAmount = prestamoFromDb.MontoPrestado,
+                Commission = prestamoFromDb.Comision,
+                Debtor = prestamoFromDb.IdDeudor.ToString(),
+                Description = prestamoFromDb.Descripcion,
+                Interest = prestamoFromDb.Intereses,
+                LoanDate = prestamoFromDb.FechaPrestamo,
+                Notes = prestamoFromDb.Notas,
+                AmountToPay = prestamoFromDb.MontoPorPagar,
+                PartialRefund = prestamoFromDb.DineroDevueltoParcial,
+                Status = prestamoFromDb.Estado,
+                TotalDebt = prestamoFromDb.DeudaTotal
+            };
+            return View(infoPrestamo);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> RegisterLoan()
         {
             PrestamoFormViewModel prestamoForm = new PrestamoFormViewModel()

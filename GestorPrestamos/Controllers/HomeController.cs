@@ -34,8 +34,8 @@ namespace GestorPrestamos.Controllers
         {
             //Log.Warning("Enter to Privacy Page");
             //var x = prestamoRepository.GetAll();
-            //var x = _loanReceivableService.GetAllLoanReceivable();
-            var x = deudoresDictionary.GetDeudoresByAlias();
+            var x = _loanReceivableService.GetAllLoanReceivable();
+            //var x = deudoresDictionary.GetDeudoresByAlias();
             return Json(x);
         }
 

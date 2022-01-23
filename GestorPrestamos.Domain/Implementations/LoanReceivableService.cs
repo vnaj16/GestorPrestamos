@@ -24,6 +24,11 @@ namespace GestorPrestamos.Domain.Implementations
            return _prestamoRepository.GetAll();
         }
 
+        public Prestamo GetLoanReceivableById(string id)
+        {
+           return _prestamoRepository.GetById(id);
+        }
+
         public RegisterLoanReceivableResponse RegisterLoanReceivable(Prestamo prestamo)
         {
             //Here will be validation logic and Business Rules
