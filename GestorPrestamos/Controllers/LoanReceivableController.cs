@@ -46,30 +46,39 @@ namespace GestorPrestamos.Controllers
         public async Task<IActionResult> RegisterLoan(PrestamoFormViewModel prestamoForm)
         {            //TODO: Aca armar Descripción
             //Categoria-Descripción-Mes
-            Prestamo prestamo = new Prestamo()
+            if (ModelState.IsValid)
             {
-                Comision = prestamoForm.Commission,
-                Descripcion = $"{prestamoForm.Category} {prestamoForm.Description} {GetMonth()}",
-                FechaPactadaDevolucion = prestamoForm.AgreedRepaymentDate,
-                FechaPrestamo = prestamoForm.LoanDate,
-                IdDeudor = prestamoForm.DebtorId,
-                Intereses = prestamoForm.Interest,
-                MontoPrestado = prestamoForm.BorrowedAmount,
-                Notas = prestamoForm.Notes
-            };
-            var response = _loanReceivableService.RegisterLoanReceivable(prestamo);
-            //return Json(response.RegisteredEntity);
-            prestamoForm.SelectablesDebtors = new List<SelectableDebtor>();
-            foreach (var item in _masterDataService.GetDebtors())
-            {
-                prestamoForm.SelectablesDebtors.Add(new SelectableDebtor()
+                Prestamo prestamo = new Prestamo()
                 {
-                    DebtorId = item.Key,
-                    Label = item.Value.Alias
-                });
+                    Comision = prestamoForm.Commission,
+                    Descripcion = $"{prestamoForm.Category} {prestamoForm.Description} {GetMonth()}",
+                    FechaPactadaDevolucion = prestamoForm.AgreedRepaymentDate,
+                    FechaPrestamo = prestamoForm.LoanDate,
+                    IdDeudor = prestamoForm.DebtorId,
+                    Intereses = prestamoForm.Interest,
+                    MontoPrestado = prestamoForm.BorrowedAmount,
+                    Notas = prestamoForm.Notes
+                };
+                var response = _loanReceivableService.RegisterLoanReceivable(prestamo);
+                prestamoForm.Id = response.RegisteredEntity.Id;
+            
+                prestamoForm.SelectablesDebtors = new List<SelectableDebtor>();
+                foreach (var item in _masterDataService.GetDebtors())
+                {
+                    prestamoForm.SelectablesDebtors.Add(new SelectableDebtor()
+                    {
+                        DebtorId = item.Key,
+                        Label = item.Value.Alias
+                    });
+                }
+                return Json(response.RegisteredEntity);
+                //return View(prestamoForm);
+            }
+            else
+            {
+                return View(prestamoForm);
             }
 
-            return View(prestamoForm);
         }
 
         private string GetMonth()

@@ -54,14 +54,14 @@
             <div class="col-lg-2">
                 <div class="form-group">
                     <label asp-for="LoanDate" class="control-label"></label>
-                    <input asp-for="LoanDate" class="custom-input" />
+                    <input asp-for="LoanDate" id="inputLoandDate" type="date" class="custom-input" />
                     <span asp-validation-for="LoanDate" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="form-group ml-2">
                     <label asp-for="AgreedRepaymentDate" class="control-label"></label>
-                    <input asp-for="AgreedRepaymentDate" class="custom-input" />
+                    <input asp-for="AgreedRepaymentDate" id="inputAgreedRepaymentDate" type="date" class="custom-input" />
                     <span asp-validation-for="AgreedRepaymentDate" class="text-danger"></span>
                 </div>
             </div>
@@ -96,8 +96,37 @@
 
 @*TODO: Implementar AJAX aquí*@
 <script>
-        registerCompleted = function(){
-            toastr.success('Loan registrado')
+
+
+        registerCompleted = function(xhr){
+            let loanId = xhr.responseJSON.id;
+            cleanInputs();
+            toastr.success(`<div>Préstamo ${loanId} registrado</div><div><button type="button" id="surpriseBtn" onclick="redirectToDetails('${loanId}')" class="btn">Ir</button></div>`)
+        }
+
+        cleanInputs = function(){
+            document.querySelector("#BorrowedAmount").value = 0;
+            document.querySelector("#Commission").value = 0;
+            document.querySelector("#Interest").value = 0;
+            document.querySelector("#Description").value = null;
+            document.querySelector("#Notes").value = null;
+            loadDateInputs();
+        }
+
+        loadDateInputs = function(){
+                    let loanDate = document.querySelector("#inputLoandDate");
+        loanDate.value = new Date().toISOString().slice(0,10);
+        //
+        let agreedRepaymentDate = document.querySelector("#inputAgreedRepaymentDate");
+        let past30Days = new Date();
+        past30Days.setDate(past30Days.getDate()+30);
+        agreedRepaymentDate.value = past30Days.toISOString().slice(0,10);
+        }
+
+        loadDateInputs();
+
+        redirectToDetails = function(loanId){
+            alert("Aca debo redigir al detalle del nuevo prestamo creado: " + loanId)
         }
 
         failureRegister = function(){

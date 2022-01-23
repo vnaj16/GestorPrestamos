@@ -4,11 +4,12 @@ namespace GestorPrestamos.ViewModels
 {
     public class PrestamoFormViewModel
     {
+        public string? Id { get; set; }
         [Display(Name = "Monto Prestado (S/.)")]
         public float BorrowedAmount { get; set; }
         [Display(Name = "Deudor")]
         public int DebtorId { get; set; }
-        public List<SelectableDebtor> SelectablesDebtors { get; set; }
+        public List<SelectableDebtor>? SelectablesDebtors { get; set; }
         [Display(Name = "Comisión (S/.)")]
         public float Commission { get; set; }
         [Display(Name = "Interés (S/.)")]

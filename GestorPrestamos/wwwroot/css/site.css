@@ -71,6 +71,7 @@ ul {
     background-color: var(--main-bg-color);
     color: var(--main-text-color);
     outline:none;
+    width: 100%;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -94,6 +95,7 @@ textarea {
 }
 
 select {
+    width: 100%;
     border-color: var(--main-color);
     border-style: solid;
     border-width: 1px;
