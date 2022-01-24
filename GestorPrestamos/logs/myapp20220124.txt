@@ -1,0 +1,2 @@
+2022-01-24 07:59:41.341 -05:00 [INF] Enter to Index Page
+2022-01-24 08:33:04.870 -05:00 [INF] Enter to Index Page
