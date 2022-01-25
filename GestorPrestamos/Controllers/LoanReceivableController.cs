@@ -44,6 +44,18 @@ namespace GestorPrestamos.Controllers
             };
             return View(infoPrestamo);
         }
+        [HttpPost]
+        public async Task<IActionResult> RegisterPayment(RegisterPaymentLoanViewModel loan)
+        {
+            var paymentLoan = new PaymentLoanReceivable()
+            {
+                LoanId = loan.Id,
+                AmountPaid = loan.AmountPaid,
+                PaymentType = loan.PaymentType
+            };
+            var response = _loanReceivableService.RegisterPaymentLoanReceivable(paymentLoan);
+            return Ok(response); //TODO: aca mandar el response, con el objetivo de actualizar la data en la UI cn la mas actual, ya que se debe actualizar si ya se pag++o todo, cuanto queda, etc
+        }
 
         [HttpGet]
         public async Task<IActionResult> RegisterLoan()

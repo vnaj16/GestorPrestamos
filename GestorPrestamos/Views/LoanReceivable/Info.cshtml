@@ -1,4 +1,5 @@
-﻿@model GestorPrestamos.ViewModels.InfoPrestamoViewModel
+﻿@using GestorPrestamos.Domain.Utils
+@model GestorPrestamos.ViewModels.InfoPrestamoViewModel
 
 @{
     ViewData["Title"] = "Info";
@@ -11,6 +12,7 @@
             <div class="col">
                 <label asp-for="Debtor"></label>
                 <input asp-for="Debtor" class="custom-input" readonly=true />
+                <input class="custom-input" id="inputLoanId" hidden readonly=true value="@Model.Id" />
             </div>
             <div class="col">
                 <label asp-for="BorrowedAmount"></label>
@@ -55,11 +57,11 @@
         <div class="row mt-4">
             <div class="col">
                 <label>Tipo Pago</label>
-                <input asp-for="Debtor" class="custom-input" readonly=true />
+                <select asp-for="PaymentType" asp-items="Html.GetEnumSelectList<PaymentType>()"></select>
             </div>
             <div class="col">
                 <label>Monto Pagado (S/.)</label>
-                <input asp-for="BorrowedAmount" class="custom-input" readonly=true />
+                <input id="inputAmountPaid" class="custom-input" type="number" />
             </div>
         </div>
         <div class="row mt-4">
@@ -68,7 +70,7 @@
             </div>
             <div class="col">
 
-                <button class="btn btn-primary">Registrar</button>
+                <button class="btn btn-primary" onclick="sendLoanToUpdate()">Registrar</button>
             </div>
 
 
@@ -79,3 +81,34 @@
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>
     </div>*@
+
+<script>
+    sendLoanToUpdate = function(){
+        let loanId = document.querySelector("#inputLoanId").value;
+        let paymentType = document.querySelector("#PaymentType").value;
+        let amountPaid = document.querySelector("#inputAmountPaid").value;
+
+        let loanToUpdate = {
+            id: loanId,
+            paymentType: paymentType,
+            amountPaid: amountPaid
+        }
+        $.ajax({
+            url: "/LoanReceivable/RegisterPayment",
+            type: "POST",
+            dataType: 'json',
+            data: {
+                loan: loanToUpdate
+            }
+        })
+            .done(function (data, textStatus, jqXHR) {
+                //TODO: Aca deberia mostrar alert de prestamo actualizo y actualizar los campos
+                console.log("Data: ",data); //Con este debo trabajar, ya que trae el objeto como en loanToUpdate
+                console.log("jqXHR: ",jqXHR);
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown);
+                console.log(jqXHR);
+            })
+        }
+</script>

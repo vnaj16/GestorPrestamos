@@ -40,5 +40,27 @@ namespace GestorPrestamos.Domain.Implementations
                 RegisterSucceeded = true
             };
         }
+
+        public RegisterPaymentLoanReceivableResponse RegisterPaymentLoanReceivable(PaymentLoanReceivable paymentLoanReceivable)
+        {//TODO Aplicaria la l´´ogica
+
+            //TODO: Traer el Prestamo de la base de datos, si no existe, lanzar error
+            switch (paymentLoanReceivable.PaymentType)
+            {
+                case Utils.PaymentType.PagoParcial:
+
+                    break;
+                case Utils.PaymentType.PagoTotal:
+
+                    break;
+                default:
+                    throw new Exception("PaymentType not supported: " + paymentLoanReceivable.PaymentType.ToString());
+                    break;
+            }
+            return new RegisterPaymentLoanReceivableResponse()
+            {
+                
+            };
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace GestorPrestamos.Domain.Interfaces
         public List<Prestamo> GetAllLoanReceivable();
         //TODO: AGREGAR GET ALL PARA PROBAR ARQUITECTURA
         public Prestamo GetLoanReceivableById(string id);
+        public RegisterPaymentLoanReceivableResponse RegisterPaymentLoanReceivable(PaymentLoanReceivable paymentLoanReceivable);
     }
 }

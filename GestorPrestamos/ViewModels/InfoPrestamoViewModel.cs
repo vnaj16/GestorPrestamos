@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
+using GestorPrestamos.Domain.Utils;
 using System.ComponentModel.DataAnnotations;
 
 namespace GestorPrestamos.ViewModels
@@ -37,5 +38,6 @@ namespace GestorPrestamos.ViewModels
 
         [Display(Name = "Notas")]
         public string? Notes { get; set; }
+        public PaymentType PaymentType { get; set; }
     }
 }
