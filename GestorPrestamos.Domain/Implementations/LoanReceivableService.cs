@@ -44,22 +44,41 @@ namespace GestorPrestamos.Domain.Implementations
         public RegisterPaymentLoanReceivableResponse RegisterPaymentLoanReceivable(PaymentLoanReceivable paymentLoanReceivable)
         {//TODO Aplicaria la l´´ogica
 
-            //TODO: Traer el Prestamo de la base de datos, si no existe, lanzar error
-            switch (paymentLoanReceivable.PaymentType)
+            var loan = _prestamoRepository.GetById(paymentLoanReceivable.LoanId);
+            if (loan is null)
             {
-                case Utils.PaymentType.PagoParcial:
+                throw new Exception($"Loan with id {paymentLoanReceivable.LoanId} doesn't exist");
+            }
+            //TODO: Validar que el tipo de pago concuerde ocn la cantidad ingresada
 
+            switch (paymentLoanReceivable.PaymentType)
+            {//TODO: Incluso creo que podria quitar el tipo de pago a seleccionar, eso se podria inferir
+                case Utils.PaymentType.PagoParcial:
+                    loan.DineroDevueltoParcial += paymentLoanReceivable.AmountPaid;
+                    loan.Estado = "Por Pagar";
+                    loan.Notas += $"El dia {DateTime.Now.ToString("d")} se realizó un pago parcial de {paymentLoanReceivable.AmountPaid} soles | ";
+                    if (loan.MontoPorPagar < 0)
+                    {
+                        loan.Estado = "Pagado";
+                        loan.Notas += $"El dia {DateTime.Now.ToString("d")} se terminó de pagar este préstam | ";
+                    }
                     break;
                 case Utils.PaymentType.PagoTotal:
-
+                    loan.DineroDevueltoParcial = 0;
+                    loan.Estado = "Pagado";
+                    loan.Notas += $"El dia {DateTime.Now.ToString("d")} se pagó totalmente este prestamo | ";
                     break;
                 default:
                     throw new Exception("PaymentType not supported: " + paymentLoanReceivable.PaymentType.ToString());
                     break;
             }
+
+            _prestamoRepository.Update(loan);
+
             return new RegisterPaymentLoanReceivableResponse()
             {
-                
+                UpdatedLoan = loan,
+                RegisterSucceeded = true
             };
         }
     }

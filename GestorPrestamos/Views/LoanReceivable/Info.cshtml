@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Info";
-    ViewData["Section"] = $"Actualizar Préstamo por Cobrar - {Model.Id}";
+    ViewData["Section"] = $"Préstamo por Cobrar - <h4>{Model.Id}</h4>";
 }
 
 <div class="row">
@@ -12,6 +12,7 @@
             <div class="col">
                 <label asp-for="Debtor"></label>
                 <input asp-for="Debtor" class="custom-input" readonly=true />
+                <span>Este mostrarle arriba como Label diciendo: prestamo realizo a X para mostrar la deuda total</span>
                 <input class="custom-input" id="inputLoanId" hidden readonly=true value="@Model.Id" />
             </div>
             <div class="col">
@@ -27,6 +28,16 @@
             <div class="col">
                 <label asp-for="Interest"></label>
                 <input asp-for="Interest" class="custom-input" readonly=true />
+            </div>
+        </div>
+                <div class="row mt-3">
+            <div class="col">
+                <label asp-for="Status"></label>
+                <input asp-for="Status" class="custom-input" readonly=true />
+            </div>
+            <div class="col">
+                <label asp-for="AmountToPay"></label>
+                <input asp-for="AmountToPay" class="custom-input" readonly=true />
             </div>
         </div>
         <div class="row mt-3">
@@ -47,13 +58,13 @@
         </div>
         <div class="row mt-3">
             <div class="col">
-                <label asp-for="Description"></label>
+                <label asp-for="Notes"></label>
                 <textarea asp-for="Notes" readonly=true></textarea>
             </div>
         </div>
     </div>
     <div class="col-lg-6">
-        <h3>Registrar Pago de Préstamo</h3>
+        <h3>Registrar Pago</h3>
         <div class="row mt-4">
             <div class="col">
                 <label>Tipo Pago</label>
@@ -105,6 +116,7 @@
                 //TODO: Aca deberia mostrar alert de prestamo actualizo y actualizar los campos
                 console.log("Data: ",data); //Con este debo trabajar, ya que trae el objeto como en loanToUpdate
                 console.log("jqXHR: ",jqXHR);
+                location.reload(); //QUITAR ESTO LUEGO
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 console.log(errorThrown);

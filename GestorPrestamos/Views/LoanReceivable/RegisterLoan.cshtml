@@ -101,6 +101,7 @@
         registerCompleted = function(xhr){
             let loanId = xhr.responseJSON.id;
             cleanInputs();
+            console.log(loanId)
             toastr.success(`<div>Préstamo ${loanId} registrado</div><div><button type="button" id="surpriseBtn" onclick="redirectToDetails('${loanId}')" class="btn">Ir</button></div>`)
         }
 
@@ -126,7 +127,8 @@
         loadDateInputs();
 
         redirectToDetails = function(loanId){
-            alert("Aca debo redigir al detalle del nuevo prestamo creado: " + loanId)
+            location.href = "/LoanReceivable/Info/" + loanId
+            //alert("Aca debo redigir al detalle del nuevo prestamo creado: " + loanId)
         }
 
         failureRegister = function(){
