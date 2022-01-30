@@ -43,11 +43,16 @@ namespace GestorPrestamos.Domain.Implementations
 
         public RegisterPaymentLoanReceivableResponse RegisterPaymentLoanReceivable(PaymentLoanReceivable paymentLoanReceivable)
         {//TODO Aplicaria la l´´ogica
+            var response = new RegisterPaymentLoanReceivableResponse();
 
             var loan = _prestamoRepository.GetById(paymentLoanReceivable.LoanId);
             if (loan is null)
             {
-                throw new Exception($"Loan with id {paymentLoanReceivable.LoanId} doesn't exist");
+                response.ErrorMessages.Add($"Loan with id {paymentLoanReceivable.LoanId} doesn't exist");
+            }
+            if (paymentLoanReceivable.AmountPaid > loan.DeudaTotal)
+            {
+                response.ErrorMessages.Add($"Se ingresó un monto mayor al dinero que se debe pagar: Monto Pagado: {paymentLoanReceivable.AmountPaid}, Monto que se debe pagar: {loan.DeudaTotal}");
             }
             //TODO: Validar que el tipo de pago concuerde ocn la cantidad ingresada
 
@@ -57,10 +62,21 @@ namespace GestorPrestamos.Domain.Implementations
                     loan.DineroDevueltoParcial += paymentLoanReceivable.AmountPaid;
                     loan.Estado = "Por Pagar";
                     loan.Notas += $"El dia {DateTime.Now.ToString("d")} se realizó un pago parcial de {paymentLoanReceivable.AmountPaid} soles | ";
-                    if (loan.MontoPorPagar < 0)
+                    if (loan.MontoPorPagar == 0)
                     {
                         loan.Estado = "Pagado";
                         loan.Notas += $"El dia {DateTime.Now.ToString("d")} se terminó de pagar este préstam | ";
+                    }
+                    else if(loan.MontoPorPagar < 0)
+                    {
+                        response.ErrorMessages.Add(
+                            $"Se ingresó un monto mayor al dinero que se debe pagar: Monto Pagado: {paymentLoanReceivable.AmountPaid}, Monto que queda por pagar: {loan.MontoPorPagar}"
+                            );
+                        break;
+                    }
+                    else
+                    {
+
                     }
                     break;
                 case Utils.PaymentType.PagoTotal:
@@ -69,17 +85,17 @@ namespace GestorPrestamos.Domain.Implementations
                     loan.Notas += $"El dia {DateTime.Now.ToString("d")} se pagó totalmente este prestamo | ";
                     break;
                 default:
-                    throw new Exception("PaymentType not supported: " + paymentLoanReceivable.PaymentType.ToString());
+                    response.RegisterSucceeded = false;
+                    response.ErrorMessages.Add(
+                        "PaymentType not supported: " + paymentLoanReceivable.PaymentType.ToString()
+                        );
                     break;
             }
 
-            _prestamoRepository.Update(loan);
+            response.UpdatedLoan = _prestamoRepository.Update(loan);
+            response.RegisterSucceeded = true;
 
-            return new RegisterPaymentLoanReceivableResponse()
-            {
-                UpdatedLoan = loan,
-                RegisterSucceeded = true
-            };
+            return response;
         }
     }
 }

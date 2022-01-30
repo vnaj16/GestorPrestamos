@@ -3,16 +3,18 @@
 
 @{
     ViewData["Title"] = "Info";
-    ViewData["Section"] = $"Préstamo por Cobrar - <h4>{Model.Id}</h4>";
+    ViewData["Section"] = $"Préstamo por Cobrar - {Model.Id}";
 }
 
 <div class="row">
     <div class="col-lg-6">
         <div class="row">
+            <h3>Préstamo realizado a @Model.Debtor</h3>
+        </div>
+        <div class="row">
             <div class="col">
-                <label asp-for="Debtor"></label>
-                <input asp-for="Debtor" class="custom-input" readonly=true />
-                <span>Este mostrarle arriba como Label diciendo: prestamo realizo a X para mostrar la deuda total</span>
+                <label asp-for="TotalDebt"></label>
+                <input asp-for="TotalDebt" class="custom-input" readonly=true />
                 <input class="custom-input" id="inputLoanId" hidden readonly=true value="@Model.Id" />
             </div>
             <div class="col">
@@ -116,11 +118,24 @@
                 //TODO: Aca deberia mostrar alert de prestamo actualizo y actualizar los campos
                 console.log("Data: ",data); //Con este debo trabajar, ya que trae el objeto como en loanToUpdate
                 console.log("jqXHR: ",jqXHR);
-                location.reload(); //QUITAR ESTO LUEGO
+                if(data.registerSucceeded){
+                    toastr.success('Préstamo actualizado con éxito');
+                    document.querySelector("#Status").value = data.updatedLoan.estado;
+                    document.querySelector("#AmountToPay").value = data.updatedLoan.montoPorPagar;
+                    document.querySelector("#Notes").value = data.updatedLoan.notas;
+                    document.querySelector("#inputAmountPaid").value = null;
+                }
+                else{
+                    toastr.error('Error al registrar el pago del Préstamo. Aca mostraria el error')
+                }
+
+                
+                //location.reload();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 console.log(errorThrown);
                 console.log(jqXHR);
+                toastr.error('No se pudo registrar el pago del Préstamo')
             })
         }
 </script>

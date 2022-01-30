@@ -32,7 +32,7 @@ namespace GestorPrestamos.Controllers
                 AgreedRepaymentDate = prestamoFromDb.FechaPactadaDevolucion,
                 BorrowedAmount = prestamoFromDb.MontoPrestado,
                 Commission = prestamoFromDb.Comision,
-                Debtor = prestamoFromDb.IdDeudor.ToString(),
+                Debtor = _masterDataService.GetDebtors()[prestamoFromDb.IdDeudor].Alias,
                 Description = prestamoFromDb.Descripcion,
                 Interest = prestamoFromDb.Intereses,
                 LoanDate = prestamoFromDb.FechaPrestamo,

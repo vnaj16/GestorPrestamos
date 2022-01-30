@@ -163,6 +163,7 @@ namespace GestorPrestamos.Data.Implementations.Excel
                         return new Prestamo()
                         {
                             Id = excelFile.GetCellValueAsString(iRow, 1),
+                            IdDeudor = deudoresDictionary.GetDeudoresByAlias()[excelFile.GetCellValueAsString(iRow, 2)].Id,
                             MontoPrestado = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 3)),
                             FechaPrestamo = excelFile.GetCellValueAsDateTime(iRow, 4),
                             Descripcion = excelFile.GetCellValueAsString(iRow, 5),

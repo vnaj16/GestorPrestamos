@@ -9,6 +9,10 @@ namespace GestorPrestamos.Domain.Responses
 {
     public class RegisterPaymentLoanReceivableResponse
     {
+        public RegisterPaymentLoanReceivableResponse()
+        {
+            ErrorMessages = new List<string>();
+        }
         public Prestamo UpdatedLoan { get; set; }
         public bool RegisterSucceeded;
         public List<string> ErrorMessages { get; set; }
