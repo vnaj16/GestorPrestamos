@@ -6,6 +6,7 @@ using System.Diagnostics;
 using GestorPrestamos.Domain.Interfaces;
 using GestorPrestamos.Domain.Interfaces.Repository;
 using GestorPrestamos.Domain.MasterData;
+using GestorPrestamos.ViewModels;
 
 namespace GestorPrestamos.Controllers
 {
@@ -38,6 +39,38 @@ namespace GestorPrestamos.Controllers
             //var x = deudoresDictionary.GetDeudoresByAlias();
             return Json(x);
         }
+
+        public IActionResult LoansToCollectIndex()
+        {
+            var x = _loanReceivableService.GetAllLoanReceivable().Where(l=>l.Estado=="Por Pagar");
+            LoansToCollectHomeViewModel result = new LoansToCollectHomeViewModel()
+            {
+                NumberOfCollectedLoans = x.Count() + 20,
+                NumberOfLoansToCollect = x.Count(),
+                TotalAmountToBeCollected = x.Sum(x => x.DeudaTotal),
+                LoansToCollect = new List<LoanToCollectViewModel>()
+            };
+
+            foreach (var loan in x)
+            {
+                result.LoansToCollect.Add(new LoanToCollectViewModel()
+                {
+                    Id = loan.Id,
+                    Debtor = loan.IdDeudor.ToString(),
+                    AmountToPay = loan.MontoPorPagar,
+                    BorrowedAmount = loan.MontoPrestado,
+                    Commission = loan.Comision,
+                    Description = loan.Descripcion,
+                    Interest = loan.Intereses,
+                    LoanDate = loan.FechaPrestamo,
+                    PartialRefund = loan.DineroDevueltoParcial,
+                    TotalDebt = loan.DeudaTotal
+                });
+            }
+            return View(result);
+        }
+
+
 
         //public IActionResult GetById(string id)
         //{

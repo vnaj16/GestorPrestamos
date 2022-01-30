@@ -33,6 +33,14 @@ span {
     color: var(--main-color);
 }
 
+td {
+    color: var(--main-text-color);
+}
+
+th {
+    color: var(--main-text-color);
+}
+
 hr {
     width: 50%;
     height: 2.5px;

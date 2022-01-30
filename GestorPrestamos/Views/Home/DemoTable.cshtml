@@ -1,0 +1,90 @@
+﻿@model IEnumerable<GestorPrestamos.ViewModels.LoanToCollectViewModel>
+
+@{
+    ViewData["Title"] = "DemoTable";
+}
+
+<h1>DemoTable</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BorrowedAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Debtor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoanDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Commission)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Interest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PartialRefund)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AmountToPay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalDebt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BorrowedAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Debtor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoanDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Commission)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Interest)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PartialRefund)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AmountToPay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalDebt)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
