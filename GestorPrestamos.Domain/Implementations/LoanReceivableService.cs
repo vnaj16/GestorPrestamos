@@ -2,6 +2,7 @@
 using GestorPrestamos.Domain.Interfaces;
 using GestorPrestamos.Domain.Interfaces.Repository;
 using GestorPrestamos.Domain.Responses;
+using GestorPrestamos.Domain.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,26 @@ namespace GestorPrestamos.Domain.Implementations
            return _prestamoRepository.GetAll();
         }
 
+        public List<Prestamo> GetAllLoanReceivableWithStatusToPay()
+        {
+            return _prestamoRepository.GetAllWithStatusToPay();
+        }
+
         public Prestamo GetLoanReceivableById(string id)
         {
            return _prestamoRepository.GetById(id);
+        }
+
+        public StatsLoanToCollect GetStats()
+        {
+            var loanList = GetAllLoanReceivable();
+            StatsLoanToCollect result = new StatsLoanToCollect()
+            {
+                NumberOfCollectedLoans = loanList.Where(l=>l.Estado == "Pagada").Count(),
+                NumberOfLoansToCollect = loanList.Where(l => l.Estado == "Por Pagar").Count(),
+                TotalAmountToBeCollected = loanList.Where(l => l.Estado == "Por Pagar").Sum(x => x.DeudaTotal)
+            };
+            return result;  
         }
 
         public RegisterLoanReceivableResponse RegisterLoanReceivable(Prestamo prestamo)

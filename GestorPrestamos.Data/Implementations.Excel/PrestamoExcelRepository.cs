@@ -262,5 +262,42 @@ namespace GestorPrestamos.Data.Implementations.Excel
                 return updatedEntity;
             }
         }
+
+        public List<Prestamo> GetAllWithStatusToPay()
+        {
+            using (SLDocument excelFile = new SLDocument(ExcelRepositoryConfiguration.FilePath))
+            {
+                int iRow = 2;
+                excelFile.SelectWorksheet("Préstamos");
+                List<Prestamo> list = new();
+
+                //TODO: Para relacionar con Deudor, podria tener un Dictionary<Alias,Deudor> para obtener la data, similar como en NovoApp
+
+                while (!string.IsNullOrEmpty(excelFile.GetCellValueAsString(iRow, 1)))
+                {
+                    if (excelFile.GetCellValueAsString(iRow, 11) == "Por Pagar")
+                    {
+                        list.Add(new Prestamo()
+                        {
+                            Id = excelFile.GetCellValueAsString(iRow, 1),
+                            MontoPrestado = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 3)),
+                            FechaPrestamo = excelFile.GetCellValueAsDateTime(iRow, 4),
+                            Descripcion = excelFile.GetCellValueAsString(iRow, 5),
+                            Comision = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 6)),
+                            Intereses = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 7)),
+                            DineroDevueltoParcial = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 8)),
+                            Estado = "Por Pagar",
+                            Notas = excelFile.GetCellValueAsString(iRow, 12),
+                            FechaPactadaDevolucion = excelFile.GetCellValueAsDateTime(iRow, 13)
+                        });
+                    }
+
+
+                    iRow++;
+                }
+
+                return list;
+            }
+        }
     }
 }

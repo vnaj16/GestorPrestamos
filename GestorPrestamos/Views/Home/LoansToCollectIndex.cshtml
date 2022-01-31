@@ -2,109 +2,115 @@
 
 @{
     ViewData["Title"] = "LoansToCollectIndex";
+    ViewData["Section"] = "Préstamos a cobrar";
 }
 
-<h1>LoansToCollectIndex</h1>
 
 <div>
-    <h4>LoansToCollectHomeViewModel</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalAmountToBeCollected)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TotalAmountToBeCollected)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NumberOfCollectedLoans)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NumberOfCollectedLoans)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NumberOfLoansToCollect)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NumberOfLoansToCollect)
-        </dd>
-    </dl>
+    <div class="row">
+        <div class="col">
+            <div class="card text-white bg-card mb-3" style="max-width: 18rem;">
+                <div class="card-header">Cantidad de dinero a cobrar</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.TotalAmountToBeCollected</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-white bg-card mb-3" style="max-width: 18rem;">
+                <div class="card-header">Número de prestamos por cobrar</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.NumberOfLoansToCollect</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-white bg-card mb-3" style="max-width: 18rem;">
+                <div class="card-header">Número de prestamos cobrados</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.NumberOfCollectedLoans</h5>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div>
     <table class="table">
-    <thead>
-        <tr>
-            <th>
-                A
-            </th>
-            <th>
-                 A
-            </th>
-            <th>
-    A
-            </th>
-            <th>
-                  A
-            </th>
-            <th>
-                   A
-            </th>
-            <th>
-                A
-            </th>
-            <th>
-                   A
-            </th>
-            <th>
-                  A
-            </th>
-            <th>
-                   A
-            </th>
-            <th>
-                A
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.LoansToCollect) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BorrowedAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Debtor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoanDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Commission)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Interest)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PartialRefund)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AmountToPay)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalDebt)
-            </td>
-            <td>
-                @Html.ActionLink("More", "Info","LoanReceivable", new { id= item.Id})
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Monto Prestado
+                </th>
+                <th>
+                    Deudor
+                </th>
+                <th>
+                    Fecha Préstamo
+                </th>
+                <th>
+                    Descripción
+                </th>
+                <th>
+                    Comisión
+                </th>
+                <th>
+                    Interes
+                </th>
+                <th>
+                    Dinero Devuelto Parcial
+                </th>
+                <th>
+                    Monto a Pagar
+                </th>
+                <th>
+                    Deuda Total
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.LoansToCollect)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BorrowedAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Debtor)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LoanDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Commission)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Interest)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PartialRefund)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AmountToPay)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalDebt)
+                    </td>
+                    <td>
+                        @Html.ActionLink("More", "Info","LoanReceivable", new { id= item.Id})
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

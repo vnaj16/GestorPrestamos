@@ -42,16 +42,17 @@ namespace GestorPrestamos.Controllers
 
         public IActionResult LoansToCollectIndex()
         {
-            var x = _loanReceivableService.GetAllLoanReceivable().Where(l=>l.Estado=="Por Pagar");
+            var listLoan = _loanReceivableService.GetAllLoanReceivableWithStatusToPay();
+            var statsLoansToCollect = _loanReceivableService.GetStats();
             LoansToCollectHomeViewModel result = new LoansToCollectHomeViewModel()
             {
-                NumberOfCollectedLoans = x.Count() + 20,
-                NumberOfLoansToCollect = x.Count(),
-                TotalAmountToBeCollected = x.Sum(x => x.DeudaTotal),
+                NumberOfCollectedLoans = statsLoansToCollect.NumberOfCollectedLoans,
+                NumberOfLoansToCollect = statsLoansToCollect.NumberOfLoansToCollect,
+                TotalAmountToBeCollected = statsLoansToCollect.TotalAmountToBeCollected,
                 LoansToCollect = new List<LoanToCollectViewModel>()
             };
 
-            foreach (var loan in x)
+            foreach (var loan in listLoan)
             {
                 result.LoansToCollect.Add(new LoanToCollectViewModel()
                 {

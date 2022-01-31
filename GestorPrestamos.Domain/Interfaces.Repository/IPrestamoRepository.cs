@@ -11,5 +11,6 @@ namespace GestorPrestamos.Domain.Interfaces.Repository
     {
         public List<Prestamo> GetAllWithDeudorEntityIncluded();
         public Prestamo GetByIdWithDeudorEntityIncluded(string id);
+        public List<Prestamo> GetAllWithStatusToPay();
     }
 }
