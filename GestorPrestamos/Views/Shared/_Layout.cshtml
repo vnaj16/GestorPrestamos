@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - GestorPrestamos</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link href="~/lib/toastr.js/toastr.css" rel="stylesheet"/>
+    <link href="~/lib/toastr.js/toastr.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/GestorPrestamos.styles.css" asp-append-version="true" />
 </head>
 <body>
@@ -33,22 +33,25 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <a class="nav-link text-dark btn-dark" asp-area="" asp-controller="Home" asp-action="Index">
-                        <span>Opciones</span>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                        <img src="./icons/settings.png" width="32" height="32">
                     </a>
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark btn-dark" asp-area="" asp-controller="LoanReceivable" asp-action="RegisterLoan"><span>Préstamo por Cobrar</span></a>
+                            <a class="nav-link text-dark custom-btn" asp-area="" asp-controller="LoanReceivable" asp-action="RegisterLoan"><span>Préstamo por Cobrar</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="LoansToCollectIndex">Home</a>
-                            <a class="navbar-brand" asp-area="" asp-controller="LoanReceivable" asp-action="Info">Info</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="LoansToCollectIndex">
+                                <img src="./icons/home.png" width="32" height="32">
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark btn-dark" asp-area="" asp-controller="Home" asp-action="Privacy"><span>Préstamo por Pagar</span></a>
+                            <a class="nav-link text-dark custom-btn" asp-area="" asp-controller="Home" asp-action="Privacy">Préstamo por Pagar</a>
                         </li>
                     </ul>
-                    <a class="nav-link text-dark btn-dark" asp-area="" asp-controller="Home" asp-action="Index"><span>Menú</span></a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                        <img src="./icons/menu.png" width="32" height="32">
+                    </a>
                 </div>
             </div>
         </nav>

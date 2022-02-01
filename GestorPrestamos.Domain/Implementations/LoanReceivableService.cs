@@ -27,7 +27,7 @@ namespace GestorPrestamos.Domain.Implementations
 
         public List<Prestamo> GetAllLoanReceivableWithStatusToPay()
         {
-            return _prestamoRepository.GetAllWithStatusToPay();
+            return _prestamoRepository.GetAllWithStatusToPay().OrderBy(l=>l.FechaPrestamo).ToList();
         }
 
         public Prestamo GetLoanReceivableById(string id)
