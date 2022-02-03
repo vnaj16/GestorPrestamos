@@ -1,12 +1,12 @@
 ﻿using GestorPrestamos.Domain.Entities;
 using GestorPrestamos.Data.Implementations.Excel;
-using SpreadsheetLight;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GestorPrestamos.Domain.MasterData;
+using OfficeOpenXml;
 
 namespace GestorPrestamos.Data.Utils
 {
@@ -25,21 +25,21 @@ namespace GestorPrestamos.Data.Utils
         private void InitializeDeudoresById()
         {
             DeudoresById = new Dictionary<int, Deudor>();
-            using (SLDocument excelFile = new SLDocument(ExcelRepositoryConfiguration.FilePath))
+            using (ExcelPackage excelFile = new ExcelPackage(ExcelRepositoryConfiguration.FilePath))
             {
                 int iRow = 4;
-                excelFile.SelectWorksheet("Personas");
+                ExcelWorksheet PrestamosWorksheet = excelFile.Workbook.Worksheets["Personas"];
                 //List<Prestamo> list = new();
 
-                while (!string.IsNullOrEmpty(excelFile.GetCellValueAsString(iRow, 3)))
+                while (PrestamosWorksheet.Cells[iRow, 3].Value is not null)
                 {
-                    int key = excelFile.GetCellValueAsInt32(iRow, 3);
+                    int key = Convert.ToInt32(PrestamosWorksheet.Cells[iRow, 3].Value);
                     DeudoresById.Add(key, new Deudor()
                     {
                         Id = key,
-                        Nombre = excelFile.GetCellValueAsString(iRow, 4),
-                        Parentezco = excelFile.GetCellValueAsString(iRow, 5),
-                        Alias = excelFile.GetCellValueAsString(iRow, 6)
+                        Nombre = PrestamosWorksheet.Cells[iRow, 4].Value.ToString(),
+                        Parentezco = PrestamosWorksheet.Cells[iRow, 5].Value.ToString(),
+                        Alias = PrestamosWorksheet.Cells[iRow,6].Value.ToString(),
                     });
 
                     iRow++;
@@ -50,26 +50,25 @@ namespace GestorPrestamos.Data.Utils
         private void InitializeDeudoresByAlias()
         {
             DeudoresByAlias = new Dictionary<string, Deudor>();
-            using (SLDocument excelFile = new SLDocument(ExcelRepositoryConfiguration.FilePath))
+            using (ExcelPackage excelFile = new ExcelPackage(ExcelRepositoryConfiguration.FilePath))
             {
                 int iRow = 4;
-                excelFile.SelectWorksheet("Personas");
+                ExcelWorksheet PrestamosWorksheet = excelFile.Workbook.Worksheets["Personas"];
                 //List<Prestamo> list = new();
 
-                while (!string.IsNullOrEmpty(excelFile.GetCellValueAsString(iRow, 3)))
+                while (PrestamosWorksheet.Cells[iRow, 3].Value is not null)
                 {
-                    string key = excelFile.GetCellValueAsString(iRow, 6);
+                    string key = PrestamosWorksheet.Cells[iRow, 6].Value.ToString();
                     DeudoresByAlias.Add(key, new Deudor()
                     {
+                        Id = Convert.ToInt32(PrestamosWorksheet.Cells[iRow, 3].Value),
+                        Nombre = PrestamosWorksheet.Cells[iRow, 4].Value.ToString(),
+                        Parentezco = PrestamosWorksheet.Cells[iRow, 5].Value.ToString(),
                         Alias = key,
-                        Id = excelFile.GetCellValueAsInt32(iRow, 3),
-                        Nombre = excelFile.GetCellValueAsString(iRow, 4),
-                        Parentezco = excelFile.GetCellValueAsString(iRow, 5)
                     });
 
                     iRow++;
                 }
-
             }
         }
 

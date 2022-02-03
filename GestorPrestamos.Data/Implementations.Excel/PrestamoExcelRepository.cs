@@ -3,13 +3,13 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using GestorPrestamos.Domain.Entities;
 using GestorPrestamos.Domain.Interfaces.Repository;
 using GestorPrestamos.Data.Utils;
-using SpreadsheetLight;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OfficeOpenXml;
 
 namespace GestorPrestamos.Data.Implementations.Excel
 {
@@ -20,32 +20,31 @@ namespace GestorPrestamos.Data.Implementations.Excel
         private readonly DeudoresDictionary deudoresDictionary;
         public PrestamoExcelRepository()
         {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             deudoresDictionary = new DeudoresDictionary();
         }
         public Prestamo Add(Prestamo newEntity)
         {
-            using (SLDocument excelFile = new SLDocument(ExcelRepositoryConfiguration.FilePath))
+            using (var excelFile = new ExcelPackage(new FileInfo(ExcelRepositoryConfiguration.FilePath)))
             {
                 newEntity.Id = Guid.NewGuid().ToString();
-
                 int iRowToInsert = GetRowIndexToInsert(excelFile);
-                excelFile.SelectWorksheet("Préstamos");
+                ExcelWorksheet PrestamosWorksheet = excelFile.Workbook.Worksheets["Préstamos"];
 
                 #region Register Data
-
-                excelFile.SetCellValue(iRowToInsert, 1, newEntity.Id);
-                excelFile.SetCellValue(iRowToInsert, 2, deudoresDictionary.GetDeudoresById()[newEntity.IdDeudor].Alias);
-                excelFile.SetCellValue(iRowToInsert, 3, newEntity.MontoPrestado);
-                excelFile.SetCellValue(iRowToInsert, 4, newEntity.FechaPrestamo);
-                excelFile.SetCellValue(iRowToInsert, 5, newEntity.Descripcion);
-                excelFile.SetCellValue(iRowToInsert, 6, newEntity.Comision);
-                excelFile.SetCellValue(iRowToInsert, 7, newEntity.Intereses);
-                excelFile.SetCellValue(iRowToInsert, 8, newEntity.DineroDevueltoParcial);
-                excelFile.SetCellValue(iRowToInsert, 9, newEntity.MontoPorPagar);
-                excelFile.SetCellValue(iRowToInsert, 10, newEntity.DeudaTotal);
-                excelFile.SetCellValue(iRowToInsert, 11, newEntity.Estado);
-                excelFile.SetCellValue(iRowToInsert, 12, newEntity.Notas);
-                excelFile.SetCellValue(iRowToInsert, 13, newEntity.FechaPactadaDevolucion);
+                PrestamosWorksheet.Cells[iRowToInsert, 1].Value = newEntity.Id;
+                PrestamosWorksheet.Cells[iRowToInsert, 2].Value = deudoresDictionary.GetDeudoresById()[newEntity.IdDeudor].Alias;
+                PrestamosWorksheet.Cells[iRowToInsert, 3].Value = newEntity.MontoPrestado;
+                PrestamosWorksheet.Cells[iRowToInsert, 4].Value = newEntity.FechaPrestamo;
+                PrestamosWorksheet.Cells[iRowToInsert, 5].Value = newEntity.Descripcion;
+                PrestamosWorksheet.Cells[iRowToInsert, 6].Value = newEntity.Comision;
+                PrestamosWorksheet.Cells[iRowToInsert, 7].Value = newEntity.Intereses;
+                PrestamosWorksheet.Cells[iRowToInsert, 8].Value = newEntity.DineroDevueltoParcial;
+                PrestamosWorksheet.Cells[iRowToInsert, 9].Value = newEntity.MontoPorPagar;
+                PrestamosWorksheet.Cells[iRowToInsert, 10].Value = newEntity.DeudaTotal;
+                PrestamosWorksheet.Cells[iRowToInsert, 11].Value = newEntity.Estado;
+                PrestamosWorksheet.Cells[iRowToInsert, 12].Value = newEntity.Notas;
+                PrestamosWorksheet.Cells[iRowToInsert, 13].Value = newEntity.FechaPactadaDevolucion;
                 #endregion
 
                 UpdateRowIndexToInsert(excelFile);
@@ -53,22 +52,24 @@ namespace GestorPrestamos.Data.Implementations.Excel
                 excelFile.Save();
 
                 return newEntity;
+
             }
         }
 
-        private int GetRowIndexToInsert(SLDocument excelFile)
+        private int GetRowIndexToInsert(ExcelPackage excelFile)
         {
             int iRow = 2;
             int iColumn = 1;
             string parameterName = "RowIndexToInsert";
             int parameterValue = default(int);
-            excelFile.SelectWorksheet("Variables");
-
-            while (!string.IsNullOrEmpty(excelFile.GetCellValueAsString(iRow, iColumn)))
+            ExcelWorksheet VariablesWorksheet = excelFile.Workbook.Worksheets["Variables"];
+            
+            while (VariablesWorksheet.Cells[iRow, iColumn].Value is not null) 
             {
-                if (excelFile.GetCellValueAsString(iRow, iColumn).Equals(parameterName))
+                if (VariablesWorksheet.Cells[iRow, iColumn].Value.ToString().Equals(parameterName))
                 {
-                    parameterValue = excelFile.GetCellValueAsInt32(iRow, iColumn + 1);
+                    
+                    parameterValue = Convert.ToInt32(VariablesWorksheet.Cells[iRow, iColumn + 1].Value);
                     return parameterValue;
                 }
                 iRow++;
@@ -77,7 +78,7 @@ namespace GestorPrestamos.Data.Implementations.Excel
             throw new Exception($"This parameter {parameterName} doesn't exist");
         }
 
-        private void UpdateRowIndexToInsert(SLDocument excelFile)
+        private void UpdateRowIndexToInsert(ExcelPackage excelFile)
         {
             int lastIndex = GetRowIndexToInsert(excelFile);
             int newIndex = lastIndex + 1;
@@ -85,12 +86,12 @@ namespace GestorPrestamos.Data.Implementations.Excel
             int iRow = 2;
             int iColumn = 1;
             string parameterName = "RowIndexToInsert";
-            excelFile.SelectWorksheet("Variables");
-            while (!string.IsNullOrEmpty(excelFile.GetCellValueAsString(iRow, iColumn)))
+            ExcelWorksheet VariablesWorksheet = excelFile.Workbook.Worksheets["Variables"];
+            while (VariablesWorksheet.Cells[iRow, iColumn].Value is not null)
             {
-                if (excelFile.GetCellValueAsString(iRow, iColumn).Equals(parameterName))
+                if (VariablesWorksheet.Cells[iRow, iColumn].Value.ToString().Equals(parameterName))
                 {
-                    excelFile.SetCellValue(iRow, iColumn + 1, newIndex);
+                    VariablesWorksheet.Cells[iRow, iColumn + 1].Value = newIndex;
                     return;
                 }
                 iRow++;
@@ -105,28 +106,29 @@ namespace GestorPrestamos.Data.Implementations.Excel
 
         public List<Prestamo> GetAll()
         {
-            using (SLDocument excelFile = new SLDocument(ExcelRepositoryConfiguration.FilePath))
+            using (ExcelPackage excelFile = new ExcelPackage(ExcelRepositoryConfiguration.FilePath))
             {
                 int iRow = 2;
-                excelFile.SelectWorksheet("Préstamos");
+                ExcelWorksheet PrestamosWorksheet = excelFile.Workbook.Worksheets["Préstamos"];
+
                 List<Prestamo> list = new();
 
                 //TODO: Para relacionar con Deudor, podria tener un Dictionary<Alias,Deudor> para obtener la data, similar como en NovoApp
 
-                while (!string.IsNullOrEmpty(excelFile.GetCellValueAsString(iRow, 1)))
+                while (PrestamosWorksheet.Cells[iRow, 1].Value is not null)
                 {
                     list.Add(new Prestamo()
                     {
-                        Id = excelFile.GetCellValueAsString(iRow, 1),
-                        MontoPrestado = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 3)),
-                        FechaPrestamo = excelFile.GetCellValueAsDateTime(iRow, 4),
-                        Descripcion = excelFile.GetCellValueAsString(iRow, 5),
-                        Comision = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 6)),
-                        Intereses = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 7)),
-                        DineroDevueltoParcial = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 8)),
-                        Estado = excelFile.GetCellValueAsString(iRow, 11),
-                        Notas = excelFile.GetCellValueAsString(iRow, 12),
-                        FechaPactadaDevolucion = excelFile.GetCellValueAsDateTime(iRow, 13)
+                        Id = PrestamosWorksheet.Cells[iRow, 1].Value.ToString(),
+                        MontoPrestado = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 3].Value),
+                        FechaPrestamo = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 4].Value),
+                        Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value.ToString(),
+                        Comision = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 6].Value),
+                        Intereses = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 7].Value),
+                        DineroDevueltoParcial = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 8].Value),
+                        Estado = PrestamosWorksheet.Cells[iRow, 11].Value.ToString(),
+                        Notas = PrestamosWorksheet.Cells[iRow, 12].Value.ToString(),
+                        FechaPactadaDevolucion = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 13].Value)
                     });
 
                     iRow++;
@@ -148,31 +150,31 @@ namespace GestorPrestamos.Data.Implementations.Excel
         /// <returns>Prestamo entity if is found, Null if is not Found</returns>
         public Prestamo GetById(string id)
         {
-            using (SLDocument excelFile = new SLDocument(ExcelRepositoryConfiguration.FilePath))
+            using (ExcelPackage excelFile = new ExcelPackage(ExcelRepositoryConfiguration.FilePath))
             {
                 int iRow = 2;
                 int iColumn = 1;
-                excelFile.SelectWorksheet("Préstamos");
+                ExcelWorksheet PrestamosWorksheet = excelFile.Workbook.Worksheets["Préstamos"];
 
                 //TODO: Para relacionar con Deudor, podria tener un Dictionary<Alias,Deudor> para obtener la data, similar como en NovoApp
 
-                while (!string.IsNullOrEmpty(excelFile.GetCellValueAsString(iRow, iColumn)))
+                while (PrestamosWorksheet.Cells[iRow, iColumn].Value is not null)
                 {
-                    if (excelFile.GetCellValueAsString(iRow, iColumn).Equals(id))
+                    if (PrestamosWorksheet.Cells[iRow, iColumn].Value.ToString().Equals(id))
                     {
                         return new Prestamo()
                         {
-                            Id = excelFile.GetCellValueAsString(iRow, 1),
-                            IdDeudor = deudoresDictionary.GetDeudoresByAlias()[excelFile.GetCellValueAsString(iRow, 2)].Id,
-                            MontoPrestado = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 3)),
-                            FechaPrestamo = excelFile.GetCellValueAsDateTime(iRow, 4),
-                            Descripcion = excelFile.GetCellValueAsString(iRow, 5),
-                            Comision = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 6)),
-                            Intereses = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 7)),
-                            DineroDevueltoParcial = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 8)),
-                            Estado = excelFile.GetCellValueAsString(iRow, 11),
-                            Notas = excelFile.GetCellValueAsString(iRow, 12),
-                            FechaPactadaDevolucion = excelFile.GetCellValueAsDateTime(iRow, 13)
+                            Id = PrestamosWorksheet.Cells[iRow, 1].Value.ToString(),
+                            IdDeudor = deudoresDictionary.GetDeudoresByAlias()[PrestamosWorksheet.Cells[iRow, 2].Value.ToString()].Id,
+                            MontoPrestado = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 3].Value),
+                            FechaPrestamo = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 4].Value),
+                            Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value.ToString(),
+                            Comision = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 6].Value),
+                            Intereses = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 7].Value),
+                            DineroDevueltoParcial = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 8].Value),
+                            Estado = PrestamosWorksheet.Cells[iRow, 11].Value.ToString(),
+                            Notas = PrestamosWorksheet.Cells[iRow, 12].Value.ToString(),
+                            FechaPactadaDevolucion = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 13].Value)
                         };
                     }
 
@@ -185,31 +187,32 @@ namespace GestorPrestamos.Data.Implementations.Excel
 
         public Prestamo GetByIdWithDeudorEntityIncluded(string id)
         {
-            using (SLDocument excelFile = new SLDocument(ExcelRepositoryConfiguration.FilePath))
+            using (ExcelPackage excelFile = new ExcelPackage(ExcelRepositoryConfiguration.FilePath))
             {
                 int iRow = 2;
                 int iColumn = 1;
-                excelFile.SelectWorksheet("Préstamos");
+                ExcelWorksheet PrestamosWorksheet = excelFile.Workbook.Worksheets["Préstamos"];
 
                 //TODO: Para relacionar con Deudor, podria tener un Dictionary<Alias,Deudor> para obtener la data, similar como en NovoApp
 
-                while (!string.IsNullOrEmpty(excelFile.GetCellValueAsString(iRow, iColumn)))
+                while (PrestamosWorksheet.Cells[iRow, iColumn].Value is not null)
                 {
-                    if (excelFile.GetCellValueAsString(iRow, iColumn).Equals(id))
+                    if (PrestamosWorksheet.Cells[iRow, iColumn].Value.ToString().Equals(id))
                     {
-                        string aliasDeudor = excelFile.GetCellValueAsString(iRow, 2);
+                        string aliasDeudor = PrestamosWorksheet.Cells[iRow, 2].Value.ToString();
                         return new Prestamo()
                         {
-                            Id = excelFile.GetCellValueAsString(iRow, 1),
-                            MontoPrestado = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 3)),
-                            FechaPrestamo = excelFile.GetCellValueAsDateTime(iRow, 4),
-                            Descripcion = excelFile.GetCellValueAsString(iRow, 5),
-                            Comision = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 6)),
-                            Intereses = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 7)),
-                            DineroDevueltoParcial = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 8)),
-                            Estado = excelFile.GetCellValueAsString(iRow, 11),
-                            Notas = excelFile.GetCellValueAsString(iRow, 12),
-                            FechaPactadaDevolucion = excelFile.GetCellValueAsDateTime(iRow, 13),
+                            Id = PrestamosWorksheet.Cells[iRow, 1].Value.ToString(),
+                            MontoPrestado = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 3].Value),
+                            FechaPrestamo = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 4].Value),
+                            Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value.ToString(),
+                            Comision = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 6].Value),
+                            Intereses = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 7].Value),
+                            DineroDevueltoParcial = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 8].Value),
+                            Estado = PrestamosWorksheet.Cells[iRow, 11].Value.ToString(),
+                            Notas = PrestamosWorksheet.Cells[iRow, 12].Value.ToString(),
+                            FechaPactadaDevolucion = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 13].Value),
+
                             IdDeudor = deudoresDictionary.GetDeudoresByAlias()[aliasDeudor].Id,
                             Deudor = deudoresDictionary.GetDeudoresByAlias()[aliasDeudor]
                         };
@@ -224,17 +227,17 @@ namespace GestorPrestamos.Data.Implementations.Excel
 
         public Prestamo Update(Prestamo updatedEntity)
         { //TODO: Tendria que buscar el iRow de dicha entidad y actualizar los campos respectivos (lo contratio a cuando leo)
-            using (SLDocument excelFile = new SLDocument(ExcelRepositoryConfiguration.FilePath))
+            using (ExcelPackage excelFile = new ExcelPackage(ExcelRepositoryConfiguration.FilePath))
             {
                 int iRowToUpdate = 2;
                 int iColumn = 1;
-                excelFile.SelectWorksheet("Préstamos");
+                ExcelWorksheet PrestamosWorksheet = excelFile.Workbook.Worksheets["Préstamos"];
 
                 //TODO: Para relacionar con Deudor, podria tener un Dictionary<Alias,Deudor> para obtener la data, similar como en NovoApp
 
-                while (!string.IsNullOrEmpty(excelFile.GetCellValueAsString(iRowToUpdate, iColumn)))
+                while (!string.IsNullOrEmpty(PrestamosWorksheet.Cells[iRowToUpdate, iColumn].Value.ToString()))
                 {
-                    if (excelFile.GetCellValueAsString(iRowToUpdate, iColumn).Equals(updatedEntity.Id))
+                    if (PrestamosWorksheet.Cells[iRowToUpdate, iColumn].Value.ToString().Equals(updatedEntity.Id))
                     {
                         break;
                     }
@@ -243,18 +246,17 @@ namespace GestorPrestamos.Data.Implementations.Excel
                 }
 
                 #region Update Data
-
-                excelFile.SetCellValue(iRowToUpdate, 3, updatedEntity.MontoPrestado);
-                excelFile.SetCellValue(iRowToUpdate, 4, updatedEntity.FechaPrestamo);
-                excelFile.SetCellValue(iRowToUpdate, 5, updatedEntity.Descripcion);
-                excelFile.SetCellValue(iRowToUpdate, 6, updatedEntity.Comision);
-                excelFile.SetCellValue(iRowToUpdate, 7, updatedEntity.Intereses);
-                excelFile.SetCellValue(iRowToUpdate, 8, updatedEntity.DineroDevueltoParcial);
-                excelFile.SetCellValue(iRowToUpdate, 9, updatedEntity.MontoPorPagar);
-                excelFile.SetCellValue(iRowToUpdate, 10, updatedEntity.DeudaTotal);
-                excelFile.SetCellValue(iRowToUpdate, 11, updatedEntity.Estado);
-                excelFile.SetCellValue(iRowToUpdate, 12, updatedEntity.Notas);
-                excelFile.SetCellValue(iRowToUpdate, 13, updatedEntity.FechaPactadaDevolucion);
+                PrestamosWorksheet.Cells[iRowToUpdate, 3].Value = updatedEntity.MontoPrestado;
+                PrestamosWorksheet.Cells[iRowToUpdate, 4].Value = updatedEntity.FechaPrestamo;
+                PrestamosWorksheet.Cells[iRowToUpdate, 5].Value = updatedEntity.Descripcion;
+                PrestamosWorksheet.Cells[iRowToUpdate, 6].Value = updatedEntity.Comision;
+                PrestamosWorksheet.Cells[iRowToUpdate, 7].Value = updatedEntity.Intereses;
+                PrestamosWorksheet.Cells[iRowToUpdate, 8].Value = updatedEntity.DineroDevueltoParcial;
+                PrestamosWorksheet.Cells[iRowToUpdate, 9].Value = updatedEntity.MontoPorPagar;
+                PrestamosWorksheet.Cells[iRowToUpdate, 10].Value = updatedEntity.DeudaTotal;
+                PrestamosWorksheet.Cells[iRowToUpdate, 11].Value = updatedEntity.Estado;
+                PrestamosWorksheet.Cells[iRowToUpdate, 12].Value = updatedEntity.Notas;
+                PrestamosWorksheet.Cells[iRowToUpdate, 13].Value = updatedEntity.FechaPactadaDevolucion;
                 #endregion
 
                 excelFile.Save();
@@ -265,33 +267,33 @@ namespace GestorPrestamos.Data.Implementations.Excel
 
         public List<Prestamo> GetAllWithStatusToPay()
         {
-            using (SLDocument excelFile = new SLDocument(ExcelRepositoryConfiguration.FilePath))
+            using (ExcelPackage excelFile = new ExcelPackage(ExcelRepositoryConfiguration.FilePath))
             {
                 int iRow = 2;
-                excelFile.SelectWorksheet("Préstamos");
+                ExcelWorksheet PrestamosWorksheet = excelFile.Workbook.Worksheets["Préstamos"];
+
                 List<Prestamo> list = new();
 
                 //TODO: Para relacionar con Deudor, podria tener un Dictionary<Alias,Deudor> para obtener la data, similar como en NovoApp
 
-                while (!string.IsNullOrEmpty(excelFile.GetCellValueAsString(iRow, 1)))
+                while (PrestamosWorksheet.Cells[iRow, 1].Value is not null)
                 {
-                    if (excelFile.GetCellValueAsString(iRow, 11) == "Por Pagar")
+                    if (PrestamosWorksheet.Cells[iRow, 11].Value.ToString() == "Por Pagar")
                     {
                         list.Add(new Prestamo()
                         {
-                            Id = excelFile.GetCellValueAsString(iRow, 1),
-                            MontoPrestado = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 3)),
-                            FechaPrestamo = excelFile.GetCellValueAsDateTime(iRow, 4),
-                            Descripcion = excelFile.GetCellValueAsString(iRow, 5),
-                            Comision = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 6)),
-                            Intereses = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 7)),
-                            DineroDevueltoParcial = Convert.ToSingle(excelFile.GetCellValueAsDouble(iRow, 8)),
+                            Id = PrestamosWorksheet.Cells[iRow, 1].Value.ToString() ?? String.Empty,
+                            MontoPrestado = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 3].Value ?? 0),
+                            FechaPrestamo = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 4].Value),
+                            Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value.ToString() ?? String.Empty,
+                            Comision = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 6].Value),
+                            Intereses = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 7].Value),
+                            DineroDevueltoParcial = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 8].Value),
                             Estado = "Por Pagar",
-                            Notas = excelFile.GetCellValueAsString(iRow, 12),
-                            FechaPactadaDevolucion = excelFile.GetCellValueAsDateTime(iRow, 13)
+                            Notas = PrestamosWorksheet.Cells[iRow, 12].Value.ToString() ?? String.Empty,
+                            FechaPactadaDevolucion = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 13].Value)
                         });
                     }
-
 
                     iRow++;
                 }
