@@ -3,7 +3,7 @@ using GestorPrestamos.Domain.Entities;
 using GestorPrestamos.Domain.MasterData;
 using GestorPrestamos.Domain.Utils;
 using Microsoft.Extensions.Logging;
-using SpreadsheetLight;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,29 +64,30 @@ namespace GestorPrestamos.Data.Utils
         {
             DeudoresById = new Dictionary<int, Deudor>();
             DeudoresByAlias = new Dictionary<string, Deudor>();
-            using (SLDocument excelFile = new SLDocument(ExcelRepositoryConfiguration.FilePath))
+            using (ExcelPackage excelFile = new ExcelPackage(ExcelRepositoryConfiguration.FilePath))
             {
                 int iRow = 4;
-                excelFile.SelectWorksheet("Personas");
+                ExcelWorksheet PrestamosWorksheet = excelFile.Workbook.Worksheets["Personas"];
 
-                while (!string.IsNullOrEmpty(excelFile.GetCellValueAsString(iRow, 3)))
+
+                while (PrestamosWorksheet.Cells[iRow, 3].Value is not null)
                 {
-                    int keyId = excelFile.GetCellValueAsInt32(iRow, 3);
+                    int keyId = Convert.ToInt32(PrestamosWorksheet.Cells[iRow, 3].Value);
                     DeudoresById.Add(keyId, new Deudor()
                     {
                         Id = keyId,
-                        Nombre = excelFile.GetCellValueAsString(iRow, 4),
-                        Parentezco = excelFile.GetCellValueAsString(iRow, 5),
-                        Alias = excelFile.GetCellValueAsString(iRow, 6)
+                        Nombre = PrestamosWorksheet.Cells[iRow, 4].Value.ToString(),
+                        Parentezco = PrestamosWorksheet.Cells[iRow, 5].Value.ToString(),
+                        Alias = PrestamosWorksheet.Cells[iRow, 6].Value.ToString(),
                     });
 
-                    string keyAlias = excelFile.GetCellValueAsString(iRow, 6);
+                    string keyAlias = PrestamosWorksheet.Cells[iRow, 6].Value.ToString();
                     DeudoresByAlias.Add(keyAlias, new Deudor()
                     {
+                        Id = Convert.ToInt32(PrestamosWorksheet.Cells[iRow, 3].Value),
+                        Nombre = PrestamosWorksheet.Cells[iRow, 4].Value.ToString(),
+                        Parentezco = PrestamosWorksheet.Cells[iRow, 5].Value.ToString(),
                         Alias = keyAlias,
-                        Id = excelFile.GetCellValueAsInt32(iRow, 3),
-                        Nombre = excelFile.GetCellValueAsString(iRow, 4),
-                        Parentezco = excelFile.GetCellValueAsString(iRow, 5)
                     });
 
                     iRow++;

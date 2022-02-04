@@ -1,4 +1,4 @@
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+//using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using GestorPrestamos.Data.Extensions;
 using GestorPrestamos.Data.Utils;
 using GestorPrestamos.Domain.Utils;

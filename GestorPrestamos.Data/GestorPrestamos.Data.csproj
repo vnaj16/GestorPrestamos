@@ -13,6 +13,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GestorPrestamos.Domain\GestorPrestamos.Domain.csproj" />
-    <ProjectReference Include="..\SpreadsheetLight\SpreadsheetLight.csproj" />
   </ItemGroup>
 </Project>

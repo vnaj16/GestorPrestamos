@@ -1,5 +1,5 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
+﻿//using DocumentFormat.OpenXml.Office2010.Excel;
+//using DocumentFormat.OpenXml.Spreadsheet;
 using GestorPrestamos.Domain.Entities;
 using GestorPrestamos.Domain.Interfaces.Repository;
 using GestorPrestamos.Data.Utils;
@@ -63,12 +63,12 @@ namespace GestorPrestamos.Data.Implementations.Excel
             string parameterName = "RowIndexToInsert";
             int parameterValue = default(int);
             ExcelWorksheet VariablesWorksheet = excelFile.Workbook.Worksheets["Variables"];
-            
-            while (VariablesWorksheet.Cells[iRow, iColumn].Value is not null) 
+
+            while (VariablesWorksheet.Cells[iRow, iColumn].Value is not null)
             {
-                if (VariablesWorksheet.Cells[iRow, iColumn].Value.ToString().Equals(parameterName))
+                if ((VariablesWorksheet.Cells[iRow, iColumn].Value?.ToString() ?? String.Empty).Equals(parameterName))
                 {
-                    
+
                     parameterValue = Convert.ToInt32(VariablesWorksheet.Cells[iRow, iColumn + 1].Value);
                     return parameterValue;
                 }
@@ -89,7 +89,7 @@ namespace GestorPrestamos.Data.Implementations.Excel
             ExcelWorksheet VariablesWorksheet = excelFile.Workbook.Worksheets["Variables"];
             while (VariablesWorksheet.Cells[iRow, iColumn].Value is not null)
             {
-                if (VariablesWorksheet.Cells[iRow, iColumn].Value.ToString().Equals(parameterName))
+                if ((VariablesWorksheet.Cells[iRow, iColumn].Value?.ToString() ?? String.Empty).Equals(parameterName))
                 {
                     VariablesWorksheet.Cells[iRow, iColumn + 1].Value = newIndex;
                     return;
@@ -119,15 +119,15 @@ namespace GestorPrestamos.Data.Implementations.Excel
                 {
                     list.Add(new Prestamo()
                     {
-                        Id = PrestamosWorksheet.Cells[iRow, 1].Value.ToString(),
+                        Id = PrestamosWorksheet.Cells[iRow, 1].Value?.ToString() ?? String.Empty,
                         MontoPrestado = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 3].Value),
                         FechaPrestamo = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 4].Value),
-                        Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value.ToString(),
+                        Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value?.ToString() ?? String.Empty,
                         Comision = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 6].Value),
                         Intereses = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 7].Value),
                         DineroDevueltoParcial = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 8].Value),
-                        Estado = PrestamosWorksheet.Cells[iRow, 11].Value.ToString(),
-                        Notas = PrestamosWorksheet.Cells[iRow, 12].Value.ToString(),
+                        Estado = PrestamosWorksheet.Cells[iRow, 11].Value?.ToString() ?? String.Empty,
+                        Notas = PrestamosWorksheet.Cells[iRow, 12].Value?.ToString() ?? String.Empty,
                         FechaPactadaDevolucion = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 13].Value)
                     });
 
@@ -160,20 +160,20 @@ namespace GestorPrestamos.Data.Implementations.Excel
 
                 while (PrestamosWorksheet.Cells[iRow, iColumn].Value is not null)
                 {
-                    if (PrestamosWorksheet.Cells[iRow, iColumn].Value.ToString().Equals(id))
+                    if ((PrestamosWorksheet.Cells[iRow, iColumn].Value?.ToString() ?? String.Empty).Equals(id))
                     {
                         return new Prestamo()
                         {
-                            Id = PrestamosWorksheet.Cells[iRow, 1].Value.ToString(),
+                            Id = PrestamosWorksheet.Cells[iRow, 1].Value?.ToString() ?? String.Empty,
                             IdDeudor = deudoresDictionary.GetDeudoresByAlias()[PrestamosWorksheet.Cells[iRow, 2].Value.ToString()].Id,
                             MontoPrestado = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 3].Value),
                             FechaPrestamo = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 4].Value),
-                            Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value.ToString(),
+                            Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value?.ToString() ?? String.Empty,
                             Comision = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 6].Value),
                             Intereses = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 7].Value),
                             DineroDevueltoParcial = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 8].Value),
-                            Estado = PrestamosWorksheet.Cells[iRow, 11].Value.ToString(),
-                            Notas = PrestamosWorksheet.Cells[iRow, 12].Value.ToString(),
+                            Estado = PrestamosWorksheet.Cells[iRow, 11].Value?.ToString() ?? String.Empty,
+                            Notas = PrestamosWorksheet.Cells[iRow, 12].Value?.ToString() ?? String.Empty,
                             FechaPactadaDevolucion = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 13].Value)
                         };
                     }
@@ -197,20 +197,20 @@ namespace GestorPrestamos.Data.Implementations.Excel
 
                 while (PrestamosWorksheet.Cells[iRow, iColumn].Value is not null)
                 {
-                    if (PrestamosWorksheet.Cells[iRow, iColumn].Value.ToString().Equals(id))
+                    if ((PrestamosWorksheet.Cells[iRow, iColumn].Value?.ToString() ?? String.Empty).Equals(id))
                     {
-                        string aliasDeudor = PrestamosWorksheet.Cells[iRow, 2].Value.ToString();
+                        string aliasDeudor = PrestamosWorksheet.Cells[iRow, 2].Value?.ToString() ?? String.Empty;
                         return new Prestamo()
                         {
-                            Id = PrestamosWorksheet.Cells[iRow, 1].Value.ToString(),
+                            Id = PrestamosWorksheet.Cells[iRow, 1].Value?.ToString() ?? String.Empty,
                             MontoPrestado = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 3].Value),
                             FechaPrestamo = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 4].Value),
-                            Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value.ToString(),
+                            Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value?.ToString() ?? String.Empty,
                             Comision = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 6].Value),
                             Intereses = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 7].Value),
                             DineroDevueltoParcial = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 8].Value),
-                            Estado = PrestamosWorksheet.Cells[iRow, 11].Value.ToString(),
-                            Notas = PrestamosWorksheet.Cells[iRow, 12].Value.ToString(),
+                            Estado = PrestamosWorksheet.Cells[iRow, 11].Value?.ToString() ?? String.Empty,
+                            Notas = PrestamosWorksheet.Cells[iRow, 12].Value?.ToString() ?? String.Empty,
                             FechaPactadaDevolucion = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 13].Value),
 
                             IdDeudor = deudoresDictionary.GetDeudoresByAlias()[aliasDeudor].Id,
@@ -282,15 +282,15 @@ namespace GestorPrestamos.Data.Implementations.Excel
                     {
                         list.Add(new Prestamo()
                         {
-                            Id = PrestamosWorksheet.Cells[iRow, 1].Value.ToString() ?? String.Empty,
+                            Id = PrestamosWorksheet.Cells[iRow, 1].Value?.ToString() ?? String.Empty,
                             MontoPrestado = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 3].Value ?? 0),
                             FechaPrestamo = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 4].Value),
-                            Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value.ToString() ?? String.Empty,
+                            Descripcion = PrestamosWorksheet.Cells[iRow, 5].Value?.ToString() ?? String.Empty,
                             Comision = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 6].Value),
                             Intereses = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 7].Value),
                             DineroDevueltoParcial = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 8].Value),
                             Estado = "Por Pagar",
-                            Notas = PrestamosWorksheet.Cells[iRow, 12].Value.ToString() ?? String.Empty,
+                            Notas = PrestamosWorksheet.Cells[iRow, 12].Value?.ToString() ?? String.Empty,
                             FechaPactadaDevolucion = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 13].Value)
                         });
                     }

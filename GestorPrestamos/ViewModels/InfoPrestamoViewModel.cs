@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using GestorPrestamos.Domain.Utils;
+﻿using GestorPrestamos.Domain.Utils;
 using System.ComponentModel.DataAnnotations;
 
 namespace GestorPrestamos.ViewModels

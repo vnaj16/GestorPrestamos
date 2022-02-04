@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
+﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace GestorPrestamos.ViewModels
