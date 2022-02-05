@@ -1,0 +1,14 @@
+2022-01-13 14:48:21.834 -05:00 [INF] Enter to Index Page
+2022-01-13 14:48:21.945 -05:00 [INF] Result from Service 146
+2022-01-13 15:02:31.306 -05:00 [INF] Enter to Index Page
+2022-01-13 15:02:31.382 -05:00 [INF] Result from Service 146
+2022-01-13 15:02:56.630 -05:00 [INF] Enter to Index Page
+2022-01-13 15:02:56.710 -05:00 [INF] Result from Service 146
+2022-01-13 15:14:11.464 -05:00 [INF] Enter to Index Page
+2022-01-13 15:14:11.512 -05:00 [INF] Result from Service 146
+2022-01-13 15:37:15.738 -05:00 [INF] Enter to Index Page
+2022-01-13 15:37:15.779 -05:00 [INF] Result from Service 146
+2022-01-13 15:42:53.265 -05:00 [INF] Enter to Index Page
+2022-01-13 15:42:53.303 -05:00 [INF] Result from Service 146
+2022-01-13 15:54:02.847 -05:00 [INF] Enter to Index Page
+2022-01-13 15:54:02.893 -05:00 [INF] Result from Service 146

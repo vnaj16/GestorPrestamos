@@ -1,0 +1,162 @@
+﻿@using GestorPrestamos.ViewModels
+@model GestorPrestamos.ViewModels.PrestamoFormViewModel
+
+@{
+    ViewData["Title"] = "RegisterLoan";
+    ViewData["Section"] = "Registrar Préstamo a Cobrar";
+}
+
+<div class="row">
+    <form id="form-register-loan" asp-action="RegisterLoan" data-ajax-method="post" data-ajax="true"
+          data-ajax-failure="failureRegister" data-ajax-loading="#loader-container"
+          data-ajax-complete="registerCompleted">
+        <div class="row mb-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label asp-for="BorrowedAmount" class="control-label"></label>
+                    <input asp-for="BorrowedAmount" class="custom-input" />
+                    <span asp-validation-for="BorrowedAmount" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group ml-2">
+                    <label asp-for="DebtorId" class="control-label"></label>
+                    <select asp-for="DebtorId"
+                            asp-items="@(new SelectList(Model.SelectablesDebtors, nameof(SelectableDebtor.DebtorId), nameof(SelectableDebtor.Label)))">
+                    </select>
+                    <span asp-validation-for="DebtorId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group ml-2">
+                    <label asp-for="Commission" class="control-label"></label>
+                    <input asp-for="Commission" class="custom-input" />
+                    <span asp-validation-for="Commission" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group ml-2">
+                    <label asp-for="Interest" class="control-label"></label>
+                    <input asp-for="Interest" class="custom-input" />
+                    <span asp-validation-for="Interest" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group ml-2">
+                    <label asp-for="Category" class="control-label"></label>
+                    <select asp-for="Category" asp-items="Html.GetEnumSelectList<Category>()"></select>
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label asp-for="LoanDate" class="control-label"></label>
+                    <input asp-for="LoanDate" id="inputLoandDate" type="date" class="custom-input" />
+                    <span asp-validation-for="LoanDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group ml-2">
+                    <label asp-for="AgreedRepaymentDate" class="control-label"></label>
+                    <input asp-for="AgreedRepaymentDate" id="inputAgreedRepaymentDate" type="date" class="custom-input" />
+                    <span asp-validation-for="AgreedRepaymentDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="form-group col-lg-12">
+                <label asp-for="Description" class="control-label">Descripción (Estructura: Categoria-Descripción-Mes)</label>
+                <textarea asp-for="Description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="form-group col-lg-12">
+                <label asp-for="Notes" class="control-label"></label>
+                <textarea asp-for="Notes"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+                Cancelar
+            </a>
+            <button type="submit" class="btn btn-primary">
+                Registrar
+            </button>
+            @*            <button type="button" onclick="registerLoan()" class="btn btn-primary">
+                Registrar
+                </button>*@
+        </div>
+    </form>
+</div>
+
+@*TODO: Implementar AJAX aquí*@
+<script>
+
+
+        registerCompleted = function(xhr){
+            let loanId = xhr.responseJSON.id;
+            cleanInputs();
+            console.log(loanId)
+            toastr.success(`<div>Préstamo ${loanId} registrado</div><div><button type="button" id="surpriseBtn" onclick="redirectToDetails('${loanId}')" class="btn">Ir</button></div>`)
+        }
+
+        cleanInputs = function(){
+            document.querySelector("#BorrowedAmount").value = 0;
+            document.querySelector("#Commission").value = 0;
+            document.querySelector("#Interest").value = 0;
+            document.querySelector("#Description").value = null;
+            document.querySelector("#Notes").value = null;
+            loadDateInputs();
+        }
+
+        loadDateInputs = function(){
+                    let loanDate = document.querySelector("#inputLoandDate");
+        loanDate.value = new Date().toISOString().slice(0,10);
+        //
+        let agreedRepaymentDate = document.querySelector("#inputAgreedRepaymentDate");
+        let past30Days = new Date();
+        past30Days.setDate(past30Days.getDate()+30);
+        agreedRepaymentDate.value = past30Days.toISOString().slice(0,10);
+        }
+
+        loadDateInputs();
+
+        redirectToDetails = function(loanId){
+            location.href = "/LoanReceivable/Info/" + loanId
+            //alert("Aca debo redigir al detalle del nuevo prestamo creado: " + loanId)
+        }
+
+        failureRegister = function(){
+            toastr.error('No se pudo registrar Loan')
+        }
+
+    //    registerLoan = function(){
+
+    //        $.ajax({
+    //    url: "/LoanReceivable/RegisterLoan",
+    //    type: "POST",
+    //    dataType: 'json',
+    //    data: {
+    //        prestamoFormViewModel: productsToDeleteList
+    //    }
+    //})
+    //    .done(function (data, textStatus, jqXHR) {
+
+    //    })
+    //    .fail(function (jqXHR, textStatus, errorThrown) {
+
+    //    })
+    //    }
+
+</script>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

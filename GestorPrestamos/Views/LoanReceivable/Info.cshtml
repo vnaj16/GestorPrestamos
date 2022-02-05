@@ -1,0 +1,141 @@
+﻿@using GestorPrestamos.Domain.Utils
+@model GestorPrestamos.ViewModels.InfoPrestamoViewModel
+
+@{
+    ViewData["Title"] = "Info";
+    ViewData["Section"] = $"Préstamo por Cobrar - {Model.Id}";
+}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="row">
+            <h3>Préstamo realizado a @Model.Debtor</h3>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label asp-for="TotalDebt"></label>
+                <input asp-for="TotalDebt" class="custom-input" readonly=true />
+                <input class="custom-input" id="inputLoanId" hidden readonly=true value="@Model.Id" />
+            </div>
+            <div class="col">
+                <label asp-for="BorrowedAmount"></label>
+                <input asp-for="BorrowedAmount" class="custom-input" readonly=true />
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label asp-for="Commission"></label>
+                <input asp-for="Commission" class="custom-input" readonly=true />
+            </div>
+            <div class="col">
+                <label asp-for="Interest"></label>
+                <input asp-for="Interest" class="custom-input" readonly=true />
+            </div>
+        </div>
+                <div class="row mt-3">
+            <div class="col">
+                <label asp-for="Status"></label>
+                <input asp-for="Status" class="custom-input" readonly=true />
+            </div>
+            <div class="col">
+                <label asp-for="AmountToPay"></label>
+                <input asp-for="AmountToPay" class="custom-input" readonly=true />
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label asp-for="LoanDate"></label>
+                <input asp-for="LoanDate" type="date" class="custom-input" readonly=true />
+            </div>
+            <div class="col">
+                <label asp-for="AgreedRepaymentDate"></label>
+                <input asp-for="AgreedRepaymentDate" type="date" class="custom-input" readonly=true />
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" readonly=true></textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label asp-for="Notes"></label>
+                <textarea asp-for="Notes" readonly=true></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <h3>Registrar Pago</h3>
+        <div class="row mt-4">
+            <div class="col">
+                <label>Tipo Pago</label>
+                <select asp-for="PaymentType" asp-items="Html.GetEnumSelectList<PaymentType>()"></select>
+            </div>
+            <div class="col">
+                <label>Monto Pagado (S/.)</label>
+                <input id="inputAmountPaid" class="custom-input" type="number" />
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col offset-3">
+                <a  class="btn btn-secondary" asp-controller="Home" asp-action="LoansToCollectIndex">Cancelar</a>
+            </div>
+            <div class="col">
+
+                <button class="btn btn-primary" onclick="sendLoanToUpdate()">Registrar</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+@*<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+    </div>*@
+
+<script>
+    sendLoanToUpdate = function(){
+        let loanId = document.querySelector("#inputLoanId").value;
+        let paymentType = document.querySelector("#PaymentType").value;
+        let amountPaid = document.querySelector("#inputAmountPaid").value;
+
+        let loanToUpdate = {
+            id: loanId,
+            paymentType: paymentType,
+            amountPaid: amountPaid
+        }
+        $.ajax({
+            url: "/LoanReceivable/RegisterPayment",
+            type: "POST",
+            dataType: 'json',
+            data: {
+                loan: loanToUpdate
+            }
+        })
+            .done(function (data, textStatus, jqXHR) {
+                //TODO: Aca deberia mostrar alert de prestamo actualizo y actualizar los campos
+                console.log("Data: ",data); //Con este debo trabajar, ya que trae el objeto como en loanToUpdate
+                console.log("jqXHR: ",jqXHR);
+                if(data.registerSucceeded){
+                    toastr.success('Préstamo actualizado con éxito');
+                    document.querySelector("#Status").value = data.updatedLoan.estado;
+                    document.querySelector("#AmountToPay").value = data.updatedLoan.montoPorPagar;
+                    document.querySelector("#Notes").value = data.updatedLoan.notas;
+                    document.querySelector("#inputAmountPaid").value = null;
+                }
+                else{
+                    toastr.error('Error al registrar el pago del Préstamo. Aca mostraria el error')
+                }
+
+                
+                //location.reload();
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown);
+                console.log(jqXHR);
+                toastr.error('No se pudo registrar el pago del Préstamo')
+            })
+        }
+</script>

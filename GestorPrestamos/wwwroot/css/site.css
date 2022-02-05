@@ -1,18 +1,144 @@
+/*//////////VARIABLES SECTION////////*/
+:root {
+    --main-bg-color: #212427;
+    --main-color: #0A81AB; /*For Label Text, Border Input, For Main or Selected Button*/
+    --main-text-color: white;
+    /*For Footer Bar: C8C6C6*/
+    /*For Second Button: 334756*/
+}
+/*//////////END VARIABLES SECTION////////*/
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
 }
+
+span {
+    color: var(--main-color);
+}
+
+td {
+    color: var(--main-text-color);
+}
+
+th {
+    color: var(--main-text-color);
+}
+
+hr {
+    width: 50%;
+    height: 2.5px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: var(--main-color);
+}
+
+.horizontal-hr {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 2px;
+    height: 256px;
+    background-color: var(--main-color);
+}
+
+p {
+    color: var(--main-color);
+}
+
+input, label {
+    display: block;
+}
+
+ul {
+    justify-content: center;
+    display: flex;
+}
+
+/*More for Input: https://www.w3schools.com/css/tryit.asp?filename=trycss_forms*/
+.custom-input {
+    border-color: var(--main-color);
+    border-style: solid;
+    border-width: 1px;
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+    outline:none;
+    width: 100%;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    /*cursor: pointer;*/
+  /*  border-radius: 4px;*/
+/*    margin-right: 2px;*/
+    color: red;
+    background-color:red;
+    opacity: 0.6;
+    filter: invert(0.8);
+}
+
+textarea {
+    border-color: var(--main-color);
+    border-style: solid;
+    border-width: 1px;
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+    outline: none;
+    width: 100%
+}
+
+select {
+    width: 100%;
+    border-color: var(--main-color);
+    border-style: solid;
+    border-width: 1px;
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+    outline: none;
+}
+
+.custom-input:focus {
+    border-width: 2px;
+}
+
+select:focus {
+    border-width: 2px;
+}
+
+.bg-card {
+    background-color: var(--main-color);
+    color: var(--main-text-color);
+}
+
+.custom-btn {
+    border-color: var(--main-color);
+    border-style: solid;
+    border-width: 1px;
+    background-color: transparent;
+    color:red;
+}
+
+
+.custom-btn:hover {
+    border-color: var(--main-color);
+    border-style: solid;
+    border-width: 2px;
+    background-color: var(--main-color);
+    color: var(--main-text-color);
+}
+

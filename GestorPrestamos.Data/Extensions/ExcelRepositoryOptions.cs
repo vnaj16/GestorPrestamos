@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GestorPrestamos.Data.Interfaces
+namespace GestorPrestamos.Data.Extensions
 {
-    public interface IRepository
+    public class ExcelRepositoryOptions
     {
-        public int GetData();
+        public string FilePath { get; set; }
     }
 }
