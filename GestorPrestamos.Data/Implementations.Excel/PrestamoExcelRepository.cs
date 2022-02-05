@@ -280,6 +280,7 @@ namespace GestorPrestamos.Data.Implementations.Excel
                 {
                     if (PrestamosWorksheet.Cells[iRow, 11].Value.ToString() == "Por Pagar")
                     {
+                        string aliasDeudor = PrestamosWorksheet.Cells[iRow, 2].Value?.ToString() ?? String.Empty;
                         list.Add(new Prestamo()
                         {
                             Id = PrestamosWorksheet.Cells[iRow, 1].Value?.ToString() ?? String.Empty,
@@ -291,7 +292,9 @@ namespace GestorPrestamos.Data.Implementations.Excel
                             DineroDevueltoParcial = Convert.ToSingle(PrestamosWorksheet.Cells[iRow, 8].Value),
                             Estado = "Por Pagar",
                             Notas = PrestamosWorksheet.Cells[iRow, 12].Value?.ToString() ?? String.Empty,
-                            FechaPactadaDevolucion = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 13].Value)
+                            FechaPactadaDevolucion = Convert.ToDateTime(PrestamosWorksheet.Cells[iRow, 13].Value),
+                            IdDeudor = deudoresDictionary.GetDeudoresByAlias()[aliasDeudor].Id,
+                            Deudor = deudoresDictionary.GetDeudoresByAlias()[aliasDeudor]
                         });
                     }
 

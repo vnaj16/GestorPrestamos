@@ -57,7 +57,7 @@ namespace GestorPrestamos.Controllers
                 result.LoansToCollect.Add(new LoanToCollectViewModel()
                 {
                     Id = loan.Id,
-                    Debtor = loan.IdDeudor.ToString(),
+                    Debtor = loan.Deudor.Alias,
                     AmountToPay = loan.MontoPorPagar,
                     BorrowedAmount = loan.MontoPrestado,
                     Commission = loan.Comision,

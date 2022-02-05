@@ -27,7 +27,7 @@ namespace GestorPrestamos.Domain.Implementations
 
         public List<Prestamo> GetAllLoanReceivableWithStatusToPay()
         {
-            return _prestamoRepository.GetAllWithStatusToPay().OrderBy(l=>l.FechaPrestamo).ToList();
+            return _prestamoRepository.GetAllWithStatusToPay().OrderByDescending(l=>l.FechaPrestamo).ToList();
         }
 
         public Prestamo GetLoanReceivableById(string id)
@@ -42,7 +42,7 @@ namespace GestorPrestamos.Domain.Implementations
             {
                 NumberOfCollectedLoans = loanList.Where(l=>l.Estado == "Pagada").Count(),
                 NumberOfLoansToCollect = loanList.Where(l => l.Estado == "Por Pagar").Count(),
-                TotalAmountToBeCollected = loanList.Where(l => l.Estado == "Por Pagar").Sum(x => x.DeudaTotal)
+                TotalAmountToBeCollected = loanList.Where(l => l.Estado == "Por Pagar").Sum(x => x.MontoPorPagar)
             };
             return result;  
         }

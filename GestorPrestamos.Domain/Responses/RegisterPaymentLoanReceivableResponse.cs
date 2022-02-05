@@ -14,7 +14,7 @@ namespace GestorPrestamos.Domain.Responses
             ErrorMessages = new List<string>();
         }
         public Prestamo UpdatedLoan { get; set; }
-        public bool RegisterSucceeded;
+        public bool RegisterSucceeded { get; set; }
         public List<string> ErrorMessages { get; set; }
 
     }
